@@ -1,31 +1,38 @@
-const CONTRACT_TYPE_LABEL = {
-  CLT: "CLT",
-  APPRENTICE: "Aprendiz",
-  INTERNSHIP: "Estágio",
-  PJ: "PJ",
-  OTHER: null, // não exibe quando não informado
+import { useApp } from "../context/AppContext";
+
+const CONTRACT_TYPE_KEY = {
+  CLT:        "contract.CLT",
+  APPRENTICE: "contract.APPRENTICE",
+  INTERNSHIP: "contract.INTERNSHIP",
+  PJ:         "contract.PJ",
+  OTHER:      "contract.OTHER",
 };
 
-function formatSalary(job) {
-  if (job.salaryType === "NEGOTIABLE") return "À combinar";
-  if (job.salaryType === "RANGE" && job.salaryMin && job.salaryMax)
-    return `${job.salaryMin} a ${job.salaryMax}`;
-  if (job.salaryMin) return job.salaryMin;
-  return null;
-}
-
 export default function JobCard({ job }) {
-  const salary = formatSalary(job);
-  const contractLabel = CONTRACT_TYPE_LABEL[job.contractType] ?? null;
-  const companyDisplay = job.companyConfidential ? "Empresa Confidencial" : job.company?.name;
+  const { t } = useApp();
+
+  const contractLabel = t(CONTRACT_TYPE_KEY[job.contractType] ?? "contract.OTHER") || null;
+
+  const companyDisplay = job.companyConfidential
+    ? t("mural.confidential")
+    : job.company?.name;
+
+  const salary = formatSalary(job, t);
+
   const deadline = job.applicationDeadline
     ? new Date(job.applicationDeadline).toLocaleDateString("pt-BR")
     : null;
 
+  const applicationHref = job.applicationLink?.startsWith("http")
+    ? job.applicationLink
+    : `mailto:${job.applicationLink}`;
+
   return (
-    <div className="job-card">
+    <article className="job-card">
       <div className="job-card-header">
-        <span className="job-category">{job.category?.name}</span>
+        <span className="job-category">
+          {job.category?.slug ? t(`category.${job.category.slug}`) : job.category?.name}
+        </span>
         {salary && <span className="job-salary">{salary}</span>}
       </div>
 
@@ -45,47 +52,59 @@ export default function JobCard({ job }) {
 
       {job.responsibilities && (
         <div className="job-section">
-          <strong>Responsabilidades</strong>
+          <strong>{t("job.responsibilities")}</strong>
           <p>{job.responsibilities}</p>
         </div>
       )}
 
       {job.requiredQualifications && (
         <div className="job-section">
-          <strong>Requisitos obrigatórios</strong>
+          <strong>{t("job.required")}</strong>
           <p>{job.requiredQualifications}</p>
         </div>
       )}
 
       {job.desiredQualifications && (
         <div className="job-section">
-          <strong>Requisitos desejáveis</strong>
+          <strong>{t("job.desired")}</strong>
           <p>{job.desiredQualifications}</p>
         </div>
       )}
 
       {job.benefits && (
         <div className="job-section">
-          <strong>Benefícios</strong>
+          <strong>{t("job.benefits")}</strong>
           <p>{job.benefits}</p>
         </div>
       )}
 
       <div className="job-card-footer">
         <span className="job-date">
-          {deadline ? `Inscrições até ${deadline}` : `Publicado em ${new Date(job.createdAt).toLocaleDateString("pt-BR")}`}
+          {deadline
+            ? `${t("mural.deadline")} ${deadline}`
+            : `${t("mural.published")} ${new Date(job.createdAt).toLocaleDateString("pt-BR")}`
+          }
         </span>
         {job.applicationLink && (
           <a
-            href={job.applicationLink.startsWith("http") ? job.applicationLink : `mailto:${job.applicationLink}`}
+            href={applicationHref}
             className="btn btn-primary btn-sm"
             target="_blank"
             rel="noreferrer"
+            aria-label={`${t("mural.apply")} — ${job.title}`}
           >
-            Candidatar-se
+            {t("mural.apply")}
           </a>
         )}
       </div>
-    </div>
+    </article>
   );
+}
+
+function formatSalary(job, t) {
+  if (job.salaryType === "NEGOTIABLE") return t("job.salary.negotiable");
+  if (job.salaryType === "RANGE" && job.salaryMin && job.salaryMax)
+    return `${job.salaryMin} a ${job.salaryMax}`;
+  if (job.salaryMin) return job.salaryMin;
+  return null;
 }
