@@ -5,6 +5,7 @@ import {
 } from "recharts";
 import AreaHeader from "../../components/AreaHeader";
 import { useAdmDashboard } from "../../hooks/useAdmDashboard";
+import { useApp } from "../../context/AppContext";
 
 // ── Paleta consistente com o design system ────────────────────────────────
 const COLOR_PRIMARY   = "#E30613";
@@ -57,6 +58,7 @@ function PieLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent, value }
 }
 
 export default function AdmDashboard() {
+  const { t } = useApp();
   const { indicators, pendingJobs, loading, approveJob, rejectJob } = useAdmDashboard();
 
   async function handleReject(id) {
@@ -91,10 +93,13 @@ export default function AdmDashboard() {
     ([type, count]) => ({ name: CONTRACT_LABEL[type] ?? type, value: count, type })
   );
 
-  // Barras horizontais: vagas por categoria
+  // Barras horizontais: vagas por categoria (nome traduzido via slug)
   const categoryData = (indicators?.jobsByCategory ?? [])
     .sort((a, b) => b.count - a.count)
-    .map((c) => ({ name: c.categoryName, vagas: c.count }));
+    .map((c) => ({
+      name: c.categorySlug ? t(`category.${c.categorySlug}`) : c.categoryName,
+      vagas: c.count,
+    }));
 
   // Barras: funil de status das vagas
   const statusOrder = ["ACTIVE", "IN_PROGRESS", "PENDING", "COMPLETED", "INACTIVE", "REJECTED"];
@@ -338,7 +343,11 @@ export default function AdmDashboard() {
                     <tr key={job.id}>
                       <td>{job.company?.name}</td>
                       <td>{job.title}</td>
-                      <td>{job.category?.name}</td>
+                      <td>
+                        {job.category?.slug
+                          ? t(`category.${job.category.slug}`)
+                          : job.category?.name}
+                      </td>
                       <td>{new Date(job.createdAt).toLocaleDateString("pt-BR")}</td>
                       <td className="table-actions">
                         <button className="btn btn-sm btn-success" onClick={() => approveJob(job.id)}>
