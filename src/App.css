@@ -434,3 +434,95 @@ textarea { resize: vertical; }
 /* ── Utilities ───────────────────────────────── */
 .loading, .empty { text-align: center; color: var(--color-text-faint); padding: 3rem 0; font-size: 0.9rem; }
 .empty a { color: var(--color-primary); font-weight: 600; }
+
+/* ─────────────────────────────────────────────────
+ * Responsividade
+ * Breakpoints:
+ *   tablet  → max-width: 768px
+ *   mobile  → max-width: 480px
+ * ───────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* Layout */
+  .area-main { padding: 1.5rem var(--layout-padding); }
+
+  /* Navbar — esconde nome do portal, mantém logo e ações */
+  .navbar-portal-name { display: none; }
+
+  /* Area header — esconde nome de usuário em telas menores */
+  .area-header-username { display: none; }
+
+  /* Hero — empilha verticalmente e esconde o logo decorativo */
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+  }
+  .hero-logo { display: none; }
+  .hero-content h1 { font-size: 1.4rem; }
+
+  /* Jobs grid — 1 coluna */
+  .jobs-grid { grid-template-columns: 1fr; }
+
+  /* Formulários — cada .form-row vira coluna única */
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Formulário de vaga — menos padding */
+  .job-form { padding: 1.25rem; }
+  .form-section { padding: 1.1rem; }
+
+  /* Auth — menos padding interno */
+  .auth-form { padding: 1.75rem 1.25rem; }
+
+  /* Tabelas — scroll horizontal em vez de quebrar layout */
+  .jobs-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* Gráfico de categorias — remove coluna fixa de 140px */
+  .category-stat-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .category-stat-bar-wrap { grid-column: 1 / -1; }
+
+  /* Section header — botão vai para nova linha se precisar */
+  .section-header { flex-direction: column; align-items: flex-start; }
+
+  /* Indicadores — 2 colunas no tablet */
+  .indicators-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Form actions — botões ocupam largura total */
+  .form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .form-actions .btn { text-align: center; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  /* Layout — mais espaço útil em telas muito pequenas */
+  :root { --layout-padding: 4vw; }
+  .area-main { padding: 1rem var(--layout-padding); }
+
+  /* Hero */
+  .hero { padding: 1.5rem 1.25rem; }
+  .hero-content h1 { font-size: 1.25rem; }
+
+  /* Navbar — altura um pouco menor */
+  .navbar { height: 56px; }
+
+  /* Indicadores — 1 coluna no mobile pequeno */
+  .indicators-grid { grid-template-columns: 1fr; }
+
+  /* Botões de ação das tabelas — empilha verticalmente */
+  .table-actions { flex-wrap: wrap; }
+
+  /* Job card footer — data e botão empilhados */
+  .job-card-footer { flex-direction: column; align-items: flex-start; }
+  .job-card-footer .btn { width: 100%; justify-content: center; }
+}
