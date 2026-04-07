@@ -174,15 +174,16 @@ export default function EmpresaDashboard() {
       {pendingAction?.status === "COMPLETED" && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3 className="modal-title">Vaga preenchida</h3>
+            <h3 className="modal-title">Confirmar vaga preenchida</h3>
             <p className="modal-desc">
-              O candidato contratado é aluno ou egresso do SENAI?
+              Parabéns pela contratação! Para fins de acompanhamento do SENAI, informe a origem do candidato selecionado.
+              Essa informação é obrigatória e não poderá ser alterada depois.
             </p>
 
             {modalError && <p className="form-error">{modalError}</p>}
 
             <div className="modal-radio-group">
-              <label className="radio-label">
+              <label className="modal-radio-option">
                 <input
                   type="radio"
                   name="filledBy"
@@ -190,9 +191,12 @@ export default function EmpresaDashboard() {
                   checked={filledBy === "SENAI_STUDENT"}
                   onChange={() => setFilledBy("SENAI_STUDENT")}
                 />
-                Sim, é aluno ou egresso do SENAI
+                <div>
+                  <div>Aluno ou egresso do SENAI</div>
+                  <div className="modal-radio-sublabel">O candidato contratado estudou no SENAI</div>
+                </div>
               </label>
-              <label className="radio-label">
+              <label className="modal-radio-option">
                 <input
                   type="radio"
                   name="filledBy"
@@ -200,14 +204,17 @@ export default function EmpresaDashboard() {
                   checked={filledBy === "OTHER"}
                   onChange={() => setFilledBy("OTHER")}
                 />
-                Não, é outro candidato
+                <div>
+                  <div>Outro candidato</div>
+                  <div className="modal-radio-sublabel">O candidato veio de outra origem</div>
+                </div>
               </label>
             </div>
 
             <div className="modal-actions">
               <button className="btn btn-ghost" onClick={cancelModal}>Cancelar</button>
               <button className="btn btn-primary" onClick={confirmModal} disabled={saving}>
-                {saving ? "Salvando..." : "Confirmar"}
+                {saving ? "Salvando..." : "Confirmar preenchimento"}
               </button>
             </div>
           </div>
