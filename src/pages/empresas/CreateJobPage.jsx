@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AreaHeader from "../../components/AreaHeader";
 import { useCategories } from "../../hooks/useCategories";
+import { useApp } from "../../context/AppContext";
 import { companyService } from "../../services/companyService";
 
 const CONTRACT_TYPE_OPTIONS = [
@@ -34,6 +35,7 @@ const INITIAL_FORM = {
 
 export default function EmpresaCreateJobPage() {
   const navigate = useNavigate();
+  const { t } = useApp();
   const { categories } = useCategories();
   const [form, setForm] = useState(INITIAL_FORM);
   const [error, setError] = useState("");
@@ -138,7 +140,9 @@ export default function EmpresaCreateJobPage() {
                   <select name="categoryId" value={form.categoryId} onChange={handleChange} required>
                     <option value="">Selecione...</option>
                     {categories.map((cat) => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                      <option key={cat.id} value={cat.id}>
+                        {cat.slug ? t(`category.${cat.slug}`) : cat.name}
+                      </option>
                     ))}
                   </select>
                 </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import AreaHeader from "../../components/AreaHeader";
 import { useCompanyJobs } from "../../hooks/useCompanyJobs";
+import { useApp } from "../../context/AppContext";
 
 const STATUS_LABEL = {
   PENDING: "Aguardando aprovação",
@@ -29,6 +30,7 @@ const STATUS_OPTIONS = [
 ];
 
 export default function EmpresaDashboard() {
+  const { t } = useApp();
   const { jobs, loading, updateJobStatus } = useCompanyJobs();
 
   // pendingAction guarda a mudança em espera antes de abrir o modal
@@ -127,7 +129,11 @@ export default function EmpresaDashboard() {
                 {jobs.map((job) => (
                   <tr key={job.id}>
                     <td>{job.title}</td>
-                    <td>{job.category?.name}</td>
+                    <td>
+                      {job.category?.slug
+                        ? t(`category.${job.category.slug}`)
+                        : job.category?.name}
+                    </td>
                     <td>
                       <span className={`badge ${STATUS_BADGE_CLASS[job.status]}`}>
                         {STATUS_LABEL[job.status]}
