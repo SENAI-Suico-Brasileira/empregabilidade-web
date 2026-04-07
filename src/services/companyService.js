@@ -9,7 +9,10 @@ export const companyService = {
   updateProfile: (data) => api.put("/empresa/perfil", data).then((r) => r.data),
 
   listJobs: () => api.get("/empresa/vagas").then((r) => r.data),
+  listCompletedTemplates: () => api.get("/empresa/vagas/templates").then((r) => r.data),
   createJob: (data) => api.post("/empresa/vagas", data).then((r) => r.data),
-  updateJobStatus: (id, status) =>
-    api.patch(`/empresa/vagas/${id}/status`, { status }).then((r) => r.data),
+
+  // extraData: { filledBy } para COMPLETED, { pauseReason } para INACTIVE
+  updateJobStatus: (id, status, extraData = {}) =>
+    api.patch(`/empresa/vagas/${id}/status`, { status, ...extraData }).then((r) => r.data),
 };

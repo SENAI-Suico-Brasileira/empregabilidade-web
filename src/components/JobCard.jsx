@@ -1,3 +1,11 @@
+const CONTRACT_TYPE_LABEL = {
+  CLT: "CLT",
+  APPRENTICE: "Aprendiz",
+  INTERNSHIP: "Estágio",
+  PJ: "PJ",
+  OTHER: null, // não exibe quando não informado
+};
+
 function formatSalary(job) {
   if (job.salaryType === "NEGOTIABLE") return "À combinar";
   if (job.salaryType === "RANGE" && job.salaryMin && job.salaryMax)
@@ -8,6 +16,7 @@ function formatSalary(job) {
 
 export default function JobCard({ job }) {
   const salary = formatSalary(job);
+  const contractLabel = CONTRACT_TYPE_LABEL[job.contractType] ?? null;
   const companyDisplay = job.companyConfidential ? "Empresa Confidencial" : job.company?.name;
   const deadline = job.applicationDeadline
     ? new Date(job.applicationDeadline).toLocaleDateString("pt-BR")
@@ -21,7 +30,11 @@ export default function JobCard({ job }) {
       </div>
 
       <h2 className="job-title">{job.title}</h2>
-      <p className="job-company">{companyDisplay}</p>
+
+      <div className="job-card-meta">
+        <p className="job-company">{companyDisplay}</p>
+        {contractLabel && <span className="job-contract-badge">{contractLabel}</span>}
+      </div>
 
       {job.workLocation && <p className="job-meta">{job.workLocation}</p>}
       {job.workSchedule && <p className="job-meta">{job.workSchedule}</p>}
