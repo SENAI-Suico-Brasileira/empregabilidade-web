@@ -3,9 +3,11 @@ import SenaiLogo from "../../components/SenaiLogo";
 import { BRAND } from "../../brand";
 import { useAuth } from "../../hooks/useAuth";
 import { useLoginForm } from "../../hooks/useLoginForm";
+import { useApp } from "../../context/AppContext";
 
 export default function EmpresaLoginPage() {
   const { isAuthenticated, user } = useAuth();
+  const { t } = useApp();
 
   if (isAuthenticated) {
     return <Navigate to={user.role === "COMPANY" ? "/empresas" : "/adm"} replace />;
@@ -19,17 +21,17 @@ export default function EmpresaLoginPage() {
 
   return (
     <div className="auth-page">
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="auth-form-header">
           <SenaiLogo size={44} />
-          <h1>Área da Empresa</h1>
+          <h1>{t("auth.companyArea")}</h1>
           <p>{BRAND.portalName}</p>
         </div>
 
-        {error && <p className="form-error">{error}</p>}
+        {error && <p className="form-error" role="alert">{error}</p>}
 
         <div className="form-group">
-          <label htmlFor="email">E-mail</label>
+          <label htmlFor="email">{t("auth.email")}</label>
           <input
             id="email"
             name="email"
@@ -38,11 +40,13 @@ export default function EmpresaLoginPage() {
             onChange={handleChange}
             placeholder="rh@suaempresa.com.br"
             required
+            autoComplete="email"
+            aria-required="true"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Senha</label>
+          <label htmlFor="password">{t("auth.password")}</label>
           <input
             id="password"
             name="password"
@@ -51,15 +55,17 @@ export default function EmpresaLoginPage() {
             onChange={handleChange}
             placeholder="••••••••"
             required
+            autoComplete="current-password"
+            aria-required="true"
           />
         </div>
 
         <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
+          {loading ? t("auth.logging") : t("auth.login")}
         </button>
 
         <p className="auth-link">
-          É analista SENAI? <Link to="/adm/login">Acesse aqui</Link>
+          {t("auth.isSenai")} <Link to="/adm/login">{t("auth.accessHere")}</Link>
         </p>
       </form>
     </div>
