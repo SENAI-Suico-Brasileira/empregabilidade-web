@@ -215,8 +215,26 @@ textarea { resize: vertical; }
   padding-left: 0.75rem;
 }
 .job-section strong { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-faint); }
-.job-section p { font-size: 0.875rem; color: #475569; line-height: 1.55; white-space: pre-line; }
-.job-section-text { font-size: 0.875rem; color: #475569; line-height: 1.55; }
+.job-section p {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.55;
+  white-space: pre-line;
+  /* Limita a 4 linhas — evita cards desproporcionais por textos longos */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.job-section-text {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .job-card-footer {
   display: flex;
   align-items: center;
@@ -225,6 +243,8 @@ textarea { resize: vertical; }
   flex-wrap: wrap;
   padding-top: 0.75rem;
   border-top: 1px solid var(--color-border-light);
+  /* Empurra o footer para o fundo independente do tamanho do conteúdo */
+  margin-top: auto;
 }
 .job-deadline { font-size: 0.8rem; color: var(--color-warning); font-weight: 500; }
 .job-date { font-size: 0.75rem; color: var(--color-text-faint); }
