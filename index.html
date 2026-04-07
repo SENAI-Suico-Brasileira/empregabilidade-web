@@ -8,7 +8,22 @@
     <title>Portal de Empregabilidade — SENAI Suiço Brasileira</title>
   </head>
   <body>
+    <!-- Skip to main content — navegação por teclado / leitores de tela -->
+    <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
+
     <div id="root"></div>
+
+    <!-- VLibras — acessibilidade em Língua Brasileira de Sinais (Libras) -->
+    <!-- Widget oficial do Governo Federal Brasileiro -->
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>new window.VLibras.Widget("https://vlibras.gov.br/app");</script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
