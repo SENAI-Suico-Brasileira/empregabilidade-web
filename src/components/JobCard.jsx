@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useApp } from "../context/AppContext";
+import ApplyModal from "./ApplyModal";
 
 const CONTRACT_TYPE_KEY = {
   CLT:        "contract.CLT",
@@ -8,8 +10,12 @@ const CONTRACT_TYPE_KEY = {
   OTHER:      "contract.OTHER",
 };
 
-export default function JobCard({ job }) {
-  const { t } = useApp();
+const DATE_LOCALE = { "pt-BR": "pt-BR", en: "en-US", es: "es-ES" };
+
+export default function JobCard({ job, onApply }) {
+  const { t, lang } = useApp();
+  const [showApply, setShowApply] = useState(false);
+  const dateLocale = DATE_LOCALE[lang] || "pt-BR";
 
   const contractLabel = t(CONTRACT_TYPE_KEY[job.contractType] ?? "contract.OTHER") || null;
 
@@ -20,12 +26,8 @@ export default function JobCard({ job }) {
   const salary = formatSalary(job, t);
 
   const deadline = job.applicationDeadline
-    ? new Date(job.applicationDeadline).toLocaleDateString("pt-BR")
+    ? new Date(job.applicationDeadline).toLocaleDateString(dateLocale)
     : null;
-
-  const applicationHref = job.applicationLink?.startsWith("http")
-    ? job.applicationLink
-    : `mailto:${job.applicationLink}`;
 
   return (
     <article className="job-card">
@@ -82,21 +84,21 @@ export default function JobCard({ job }) {
         <span className="job-date">
           {deadline
             ? `${t("mural.deadline")} ${deadline}`
-            : `${t("mural.published")} ${new Date(job.createdAt).toLocaleDateString("pt-BR")}`
+            : `${t("mural.published")} ${new Date(job.createdAt).toLocaleDateString(dateLocale)}`
           }
         </span>
-        {job.applicationLink && (
-          <a
-            href={applicationHref}
-            className="btn btn-primary btn-sm"
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${t("mural.apply")} — ${job.title}`}
-          >
-            {t("mural.apply")}
-          </a>
-        )}
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => setShowApply(true)}
+          aria-label={`${t("mural.apply")} — ${job.title}`}
+        >
+          {t("mural.apply")}
+        </button>
       </div>
+
+      {showApply && (
+        <ApplyModal job={job} onClose={() => setShowApply(false)} />
+      )}
     </article>
   );
 }
