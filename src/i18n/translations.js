@@ -94,6 +94,52 @@ export const translations = {
     "category.logistica":      "Logística",
     "category.saude":          "Saúde",
     "category.educacao":       "Educação",
+
+    // ── Candidatura ─────────────────────────────────────
+    "apply.title":           "Candidatar-se à vaga",
+    "apply.cpfLabel":        "CPF",
+    "apply.cpfPlaceholder":  "000.000.000-00",
+    "apply.cpfHint":         "Usamos o CPF para evitar candidaturas duplicadas.",
+    "apply.checkCpf":        "Continuar",
+    "apply.returning":       "Bem-vindo de volta, {name}! Seus dados foram encontrados.",
+    "apply.nameLabel":       "Nome completo",
+    "apply.birthLabel":      "Data de nascimento",
+    "apply.modalityLabel":   "Modalidade de ensino no SENAI",
+    "apply.classNameLabel":  "Nome da turma",
+    "apply.classYearLabel":  "Ano da turma",
+    "apply.lgpd":            "Autorizo o uso dos meus dados para candidatura a vagas de emprego, conforme a LGPD (Lei nº 13.709/2018).",
+    "apply.submit":          "Enviar candidatura",
+    "apply.submitting":      "Enviando...",
+    "apply.successTitle":    "Candidatura enviada!",
+    "apply.successDesc":     "Seus dados foram registrados. Segue o contato da empresa:",
+    "apply.contactEmail":    "E-mail",
+    "apply.contactPhone":    "Telefone",
+    "apply.contactLink":     "Link de inscrição",
+    "apply.close":           "Fechar",
+    "apply.duplicateError":  "Você já se candidatou a esta vaga.",
+
+    // ── Modalidades ─────────────────────────────────────
+    "modality.FIC":           "FIC — Formação Inicial e Continuada",
+    "modality.TECNICO":       "Técnico",
+    "modality.CAI":           "CAI — Aprendizagem Industrial",
+    "modality.SUPERIOR":      "Superior",
+    "modality.POS_GRADUACAO": "Pós-Graduação",
+    "modality.EGRESSO":       "Egresso",
+
+    // ── Contato da vaga (cadastro empresa) ──────────────
+    "job.contactEmail": "E-mail para candidaturas",
+    "job.contactPhone": "Telefone / WhatsApp",
+    "job.contactLink":  "Link de plataforma de inscrição",
+
+    // ── Candidatos (empresa e adm) ───────────────────────
+    "applicants.title":       "Candidatos",
+    "applicants.empty":       "Nenhuma candidatura recebida ainda.",
+    "applicants.name":        "Nome",
+    "applicants.modality":    "Modalidade",
+    "applicants.className":   "Turma",
+    "applicants.date":        "Data de candidatura",
+    "applicants.senaiStudent":"Aluno SENAI contratado",
+    "applicants.nameFilled":  "Nome registrado pela empresa",
   },
 
   "en": {
@@ -176,6 +222,52 @@ export const translations = {
     "category.logistica":      "Logistics",
     "category.saude":          "Healthcare",
     "category.educacao":       "Education",
+
+    // ── Apply flow ──────────────────────────────────────
+    "apply.title":           "Apply for this job",
+    "apply.cpfLabel":        "CPF (Brazilian tax ID)",
+    "apply.cpfPlaceholder":  "000.000.000-00",
+    "apply.cpfHint":         "We use your CPF to prevent duplicate applications.",
+    "apply.checkCpf":        "Continue",
+    "apply.returning":       "Welcome back, {name}! Your data was found.",
+    "apply.nameLabel":       "Full name",
+    "apply.birthLabel":      "Date of birth",
+    "apply.modalityLabel":   "SENAI study modality",
+    "apply.classNameLabel":  "Class name",
+    "apply.classYearLabel":  "Class year",
+    "apply.lgpd":            "I authorize the use of my data for job applications under Brazilian Data Protection Law (LGPD).",
+    "apply.submit":          "Submit application",
+    "apply.submitting":      "Submitting...",
+    "apply.successTitle":    "Application submitted!",
+    "apply.successDesc":     "Your data has been recorded. Here is the company contact:",
+    "apply.contactEmail":    "Email",
+    "apply.contactPhone":    "Phone",
+    "apply.contactLink":     "Application link",
+    "apply.close":           "Close",
+    "apply.duplicateError":  "You have already applied for this job.",
+
+    // ── Modalities ──────────────────────────────────────
+    "modality.FIC":           "FIC — Initial Training",
+    "modality.TECNICO":       "Technical",
+    "modality.CAI":           "CAI — Industrial Apprenticeship",
+    "modality.SUPERIOR":      "Higher Education",
+    "modality.POS_GRADUACAO": "Post-Graduate",
+    "modality.EGRESSO":       "Alumni",
+
+    // ── Job contact (company form) ──────────────────────
+    "job.contactEmail": "Application email",
+    "job.contactPhone": "Phone / WhatsApp",
+    "job.contactLink":  "Application platform link",
+
+    // ── Applicants ──────────────────────────────────────
+    "applicants.title":       "Applicants",
+    "applicants.empty":       "No applications received yet.",
+    "applicants.name":        "Name",
+    "applicants.modality":    "Modality",
+    "applicants.className":   "Class",
+    "applicants.date":        "Applied on",
+    "applicants.senaiStudent":"SENAI student hired",
+    "applicants.nameFilled":  "Name registered by company",
   },
 
   "es": {
@@ -258,5 +350,51 @@ export const translations = {
     "category.logistica":      "Logística",
     "category.saude":          "Salud",
     "category.educacao":       "Educación",
+
+    // ── Candidatura ─────────────────────────────────────
+    "apply.title":           "Postularme a esta oferta",
+    "apply.cpfLabel":        "CPF",
+    "apply.cpfPlaceholder":  "000.000.000-00",
+    "apply.cpfHint":         "Usamos el CPF para evitar postulaciones duplicadas.",
+    "apply.checkCpf":        "Continuar",
+    "apply.returning":       "Bienvenido de nuevo, {name}! Encontramos tus datos.",
+    "apply.nameLabel":       "Nombre completo",
+    "apply.birthLabel":      "Fecha de nacimiento",
+    "apply.modalityLabel":   "Modalidad de estudio en SENAI",
+    "apply.classNameLabel":  "Nombre del grupo",
+    "apply.classYearLabel":  "Año del grupo",
+    "apply.lgpd":            "Autorizo el uso de mis datos para postulaciones a empleos conforme a la LGPD.",
+    "apply.submit":          "Enviar postulación",
+    "apply.submitting":      "Enviando...",
+    "apply.successTitle":    "¡Postulación enviada!",
+    "apply.successDesc":     "Tus datos fueron registrados. Aquí está el contacto de la empresa:",
+    "apply.contactEmail":    "Correo electrónico",
+    "apply.contactPhone":    "Teléfono",
+    "apply.contactLink":     "Enlace de inscripción",
+    "apply.close":           "Cerrar",
+    "apply.duplicateError":  "Ya te has postulado a esta oferta.",
+
+    // ── Modalidades ─────────────────────────────────────
+    "modality.FIC":           "FIC — Formación Inicial",
+    "modality.TECNICO":       "Técnico",
+    "modality.CAI":           "CAI — Aprendizaje Industrial",
+    "modality.SUPERIOR":      "Superior",
+    "modality.POS_GRADUACAO": "Posgrado",
+    "modality.EGRESSO":       "Egresado",
+
+    // ── Contacto de la oferta ───────────────────────────
+    "job.contactEmail": "Correo para postulaciones",
+    "job.contactPhone": "Teléfono / WhatsApp",
+    "job.contactLink":  "Enlace de plataforma de inscripción",
+
+    // ── Candidatos ──────────────────────────────────────
+    "applicants.title":       "Candidatos",
+    "applicants.empty":       "Ninguna postulación recibida aún.",
+    "applicants.name":        "Nombre",
+    "applicants.modality":    "Modalidad",
+    "applicants.className":   "Grupo",
+    "applicants.date":        "Fecha de postulación",
+    "applicants.senaiStudent":"Alumno SENAI contratado",
+    "applicants.nameFilled":  "Nombre registrado por la empresa",
   },
 };
