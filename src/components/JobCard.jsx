@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useApp } from "../context/AppContext";
 import ApplyModal from "./ApplyModal";
 
@@ -96,10 +97,13 @@ export default function JobCard({ job, onApply }) {
         </button>
       </div>
 
-      {showApply && (
-        <ApplyModal job={job} onClose={() => setShowApply(false)} />
-      )}
     </article>
+
+    {/* Renderiza fora da árvore do card para evitar overflow/z-index */}
+    {showApply && createPortal(
+      <ApplyModal job={job} onClose={() => setShowApply(false)} />,
+      document.body
+    )}
   );
 }
 
