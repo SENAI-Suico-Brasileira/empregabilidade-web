@@ -29,6 +29,9 @@ const INITIAL_FORM = {
   salaryMax: "",
   applicationDeadline: "",
   applicationLink: "",
+  contactEmail: "",
+  contactPhone: "",
+  contactLink: "",
   lgpdConsent: false,
   senaiDisclaimer: false,
 };
@@ -231,9 +234,42 @@ export default function EmpresaCreateJobPage() {
                   <input type="date" name="applicationDeadline" value={form.applicationDeadline} onChange={handleChange} />
                 </div>
                 <div className="form-group">
-                  <label>Link ou e-mail para envio do currículo</label>
-                  <input name="applicationLink" value={form.applicationLink} onChange={handleChange} placeholder="https://... ou email@empresa.com.br" />
+                  <label>Link externo de candidatura (opcional)</label>
+                  <input name="applicationLink" value={form.applicationLink} onChange={handleChange} placeholder="https://plataforma.com/vaga" />
                 </div>
+              </div>
+              <p className="field-hint" style={{ marginTop: 0 }}>
+                Preencha abaixo os dados de contato que serão revelados ao candidato somente após ele se candidatar pelo mural.
+              </p>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>{t("job.contactEmail")}</label>
+                  <input
+                    name="contactEmail"
+                    type="email"
+                    value={form.contactEmail}
+                    onChange={handleChange}
+                    placeholder="rh@empresa.com.br"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>{t("job.contactPhone")}</label>
+                  <input
+                    name="contactPhone"
+                    value={form.contactPhone}
+                    onChange={handleChange}
+                    placeholder="(11) 99999-0000"
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>{t("job.contactLink")}</label>
+                <input
+                  name="contactLink"
+                  value={form.contactLink}
+                  onChange={handleChange}
+                  placeholder="https://vagas.empresa.com.br/inscricao"
+                />
               </div>
             </fieldset>
 
