@@ -117,6 +117,11 @@ export const translations = {
     "apply.contactLink":     "Link de inscrição",
     "apply.close":           "Fechar",
     "apply.duplicateError":  "Você já se candidatou a esta vaga.",
+    "apply.sectionPersonal": "Dados pessoais",
+    "apply.sectionAcademic": "Dados acadêmicos",
+    "apply.semesterLabel":   "Semestre atual",
+    "apply.courseCompleted": "Já concluí este curso",
+    "apply.successNoContact":"Aguarde o contato da empresa.",
 
     // ── Modalidades ─────────────────────────────────────
     "modality.FIC":           "FIC — Formação Inicial e Continuada",
@@ -245,6 +250,11 @@ export const translations = {
     "apply.contactLink":     "Application link",
     "apply.close":           "Close",
     "apply.duplicateError":  "You have already applied for this job.",
+    "apply.sectionPersonal": "Personal information",
+    "apply.sectionAcademic": "Academic information",
+    "apply.semesterLabel":   "Current semester",
+    "apply.courseCompleted": "I have already completed this course",
+    "apply.successNoContact":"The company will contact you soon.",
 
     // ── Modalities ──────────────────────────────────────
     "modality.FIC":           "FIC — Initial Training",
@@ -373,6 +383,11 @@ export const translations = {
     "apply.contactLink":     "Enlace de inscripción",
     "apply.close":           "Cerrar",
     "apply.duplicateError":  "Ya te has postulado a esta oferta.",
+    "apply.sectionPersonal": "Datos personales",
+    "apply.sectionAcademic": "Datos académicos",
+    "apply.semesterLabel":   "Semestre actual",
+    "apply.courseCompleted": "Ya he concluido este curso",
+    "apply.successNoContact":"La empresa se pondrá en contacto contigo pronto.",
 
     // ── Modalidades ─────────────────────────────────────
     "modality.FIC":           "FIC — Formación Inicial",
