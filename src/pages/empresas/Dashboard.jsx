@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AreaHeader from "../../components/AreaHeader";
 import { useCompanyJobs } from "../../hooks/useCompanyJobs";
 import { useApp } from "../../context/AppContext";
+import { companyService } from "../../services/companyService";
 
 const STATUS_LABEL = {
   PENDING: "Aguardando aprovação",
@@ -29,25 +30,53 @@ const STATUS_OPTIONS = [
   { value: "COMPLETED", label: "Vaga preenchida" },
 ];
 
-export default function EmpresaDashboard() {
-  const { t } = useApp();
-  const { jobs, loading, updateJobStatus } = useCompanyJobs();
+const DATE_LOCALE = { "pt-BR": "pt-BR", en: "en-US", es: "es-ES" };
+const MODALITY_LABEL = {
+  FIC:           "FIC",
+  TECNICO:       "Técnico",
+  CAI:           "CAI",
+  SUPERIOR:      "Superior",
+  POS_GRADUACAO: "Pós-Grad.",
+  EGRESSO:       "Egresso",
+};
 
-  // pendingAction guarda a mudança em espera antes de abrir o modal
+export default function EmpresaDashboard() {
+  const { t, lang } = useApp();
+  const { jobs, loading, updateJobStatus } = useCompanyJobs();
+  const dateLocale = DATE_LOCALE[lang] || "pt-BR";
+
   const [pendingAction, setPendingAction] = useState(null);
-  // { jobId, status } — preenchido antes de abrir o modal correspondente
 
   // Campos dos modais
   const [filledBy, setFilledBy] = useState("");
+  const [filledStudentName, setFilledStudentName] = useState("");
   const [pauseReason, setPauseReason] = useState("");
   const [modalError, setModalError] = useState("");
   const [saving, setSaving] = useState(false);
+
+  // Painel de candidatos
+  const [expandedJobId, setExpandedJobId] = useState(null);
+  const [applicants, setApplicants] = useState({});
+  const [loadingApplicants, setLoadingApplicants] = useState(false);
+
+  async function toggleApplicants(jobId) {
+    if (expandedJobId === jobId) { setExpandedJobId(null); return; }
+    setExpandedJobId(jobId);
+    if (applicants[jobId]) return; // já carregado
+    setLoadingApplicants(true);
+    try {
+      const data = await companyService.listApplicants(jobId);
+      setApplicants((prev) => ({ ...prev, [jobId]: data }));
+    } catch { /* silencioso */ }
+    finally { setLoadingApplicants(false); }
+  }
 
   function handleStatusSelect(jobId, status) {
     setModalError("");
 
     if (status === "COMPLETED") {
       setFilledBy("");
+      setFilledStudentName("");
       setPendingAction({ jobId, status });
       return;
     }
@@ -56,7 +85,6 @@ export default function EmpresaDashboard() {
       setPendingAction({ jobId, status });
       return;
     }
-    // IN_PROGRESS não precisa de dados extras
     updateJobStatus(jobId, status);
   }
 
@@ -76,7 +104,7 @@ export default function EmpresaDashboard() {
     try {
       const extraData =
         pendingAction.status === "COMPLETED"
-          ? { filledBy }
+          ? { filledBy, filledStudentName: filledBy === "SENAI_STUDENT" ? filledStudentName : undefined }
           : { pauseReason };
 
       await updateJobStatus(pendingAction.jobId, pendingAction.status, extraData);
@@ -123,52 +151,105 @@ export default function EmpresaDashboard() {
                   <th>Status</th>
                   <th>Cadastrada em</th>
                   <th>Atualizar</th>
+                  <th>{t("applicants.title")}</th>
                 </tr>
               </thead>
               <tbody>
                 {jobs.map((job) => (
-                  <tr key={job.id}>
-                    <td>{job.title}</td>
-                    <td>
-                      {job.category?.slug
-                        ? t(`category.${job.category.slug}`)
-                        : job.category?.name}
-                    </td>
-                    <td>
-                      <span className={`badge ${STATUS_BADGE_CLASS[job.status]}`}>
-                        {STATUS_LABEL[job.status]}
-                      </span>
-                      {job.status === "REJECTED" && job.rejectionReason && (
-                        <span className="rejection-reason" title={job.rejectionReason}> — ver motivo</span>
-                      )}
-                      {job.status === "INACTIVE" && job.pauseReason && (
-                        <span className="rejection-reason" title={job.pauseReason}> — ver motivo</span>
-                      )}
-                    </td>
-                    <td>{new Date(job.createdAt).toLocaleDateString("pt-BR")}</td>
-                    <td>
-                      {/* COMPLETED é terminal — sem controles */}
-                      {["ACTIVE", "IN_PROGRESS", "INACTIVE"].includes(job.status) && (
-                        <select
-                          className="filter-select filter-select-sm"
-                          value={job.status}
-                          onChange={(e) => handleStatusSelect(job.id, e.target.value)}
-                        >
-                          <option value={job.status} disabled>
-                            {STATUS_LABEL[job.status]}
-                          </option>
-                          {STATUS_OPTIONS.filter((o) => o.value !== job.status).map((opt) => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
-                      )}
-                      {job.status === "COMPLETED" && (
-                        <span className="status-final">
-                          {job.filledBy === "SENAI_STUDENT" ? "Aluno SENAI" : "Outro candidato"}
+                  <>
+                    <tr key={job.id}>
+                      <td>{job.title}</td>
+                      <td>
+                        {job.category?.slug
+                          ? t(`category.${job.category.slug}`)
+                          : job.category?.name}
+                      </td>
+                      <td>
+                        <span className={`badge ${STATUS_BADGE_CLASS[job.status]}`}>
+                          {STATUS_LABEL[job.status]}
                         </span>
-                      )}
-                    </td>
-                  </tr>
+                        {job.status === "REJECTED" && job.rejectionReason && (
+                          <span className="rejection-reason" title={job.rejectionReason}> — ver motivo</span>
+                        )}
+                        {job.status === "INACTIVE" && job.pauseReason && (
+                          <span className="rejection-reason" title={job.pauseReason}> — ver motivo</span>
+                        )}
+                      </td>
+                      <td>{new Date(job.createdAt).toLocaleDateString(dateLocale)}</td>
+                      <td>
+                        {["ACTIVE", "IN_PROGRESS", "INACTIVE"].includes(job.status) && (
+                          <select
+                            className="filter-select filter-select-sm"
+                            value={job.status}
+                            onChange={(e) => handleStatusSelect(job.id, e.target.value)}
+                          >
+                            <option value={job.status} disabled>
+                              {STATUS_LABEL[job.status]}
+                            </option>
+                            {STATUS_OPTIONS.filter((o) => o.value !== job.status).map((opt) => (
+                              <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                          </select>
+                        )}
+                        {job.status === "COMPLETED" && (
+                          <span className="status-final">
+                            {job.filledBy === "SENAI_STUDENT"
+                              ? job.filledStudentName
+                                ? `Aluno SENAI — ${job.filledStudentName}`
+                                : "Aluno SENAI"
+                              : "Outro candidato"}
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        <button
+                          className="expand-btn"
+                          onClick={() => toggleApplicants(job.id)}
+                          aria-expanded={expandedJobId === job.id}
+                        >
+                          {expandedJobId === job.id ? "▲ Fechar" : "▼ Ver"}
+                        </button>
+                      </td>
+                    </tr>
+                    {expandedJobId === job.id && (
+                      <tr key={`${job.id}-applicants`}>
+                        <td colSpan={6} style={{ padding: "0.5rem 1rem 1rem" }}>
+                          {loadingApplicants && !applicants[job.id] ? (
+                            <p className="loading" style={{ padding: "1rem 0" }}>{t("common.loading")}</p>
+                          ) : (applicants[job.id] || []).length === 0 ? (
+                            <p className="applicants-empty">{t("applicants.empty")}</p>
+                          ) : (
+                            <div className="applicants-panel">
+                              <div className="applicants-panel-header">
+                                <span className="applicants-panel-title">{t("applicants.title")}</span>
+                                <span className="applicants-count">{applicants[job.id].length} candidato(s)</span>
+                              </div>
+                              <table className="applicants-table">
+                                <thead>
+                                  <tr>
+                                    <th>{t("applicants.name")}</th>
+                                    <th>{t("applicants.modality")}</th>
+                                    <th>{t("applicants.className")}</th>
+                                    <th>{t("applicants.date")}</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {applicants[job.id].map((app) => (
+                                    <tr key={app.id}>
+                                      <td>{app.applicant.name}</td>
+                                      <td>{MODALITY_LABEL[app.applicant.modality] || app.applicant.modality}</td>
+                                      <td>{app.applicant.className || "—"}{app.applicant.classYear ? ` (${app.applicant.classYear})` : ""}</td>
+                                      <td>{new Date(app.createdAt).toLocaleDateString(dateLocale)}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 ))}
               </tbody>
             </table>
@@ -216,6 +297,18 @@ export default function EmpresaDashboard() {
                 </div>
               </label>
             </div>
+
+            {filledBy === "SENAI_STUDENT" && (
+              <div className="form-group">
+                <label>Nome do aluno SENAI contratado (opcional)</label>
+                <input
+                  placeholder="Ex: João Silva"
+                  value={filledStudentName}
+                  onChange={(e) => setFilledStudentName(e.target.value)}
+                />
+                <span className="field-hint">Se informado, aparecerá nos indicadores do painel.</span>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button className="btn btn-ghost" onClick={cancelModal}>Cancelar</button>
