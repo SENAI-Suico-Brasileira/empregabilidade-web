@@ -12,7 +12,10 @@ export const companyService = {
   listCompletedTemplates: () => api.get("/empresa/vagas/templates").then((r) => r.data),
   createJob: (data) => api.post("/empresa/vagas", data).then((r) => r.data),
 
-  // extraData: { filledBy } para COMPLETED, { pauseReason } para INACTIVE
+  // extraData: { filledBy, filledStudentName } para COMPLETED, { pauseReason } para INACTIVE
   updateJobStatus: (id, status, extraData = {}) =>
     api.patch(`/empresa/vagas/${id}/status`, { status, ...extraData }).then((r) => r.data),
+
+  listApplicants: (jobId) =>
+    api.get(`/empresa/vagas/${jobId}/candidatos`).then((r) => r.data),
 };

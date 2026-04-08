@@ -7,4 +7,10 @@ import api from "./api";
 export const jobsService = {
   list: (params = {}) => api.get("/jobs", { params }).then((r) => r.data),
   getById: (id) => api.get(`/jobs/${id}`).then((r) => r.data),
+
+  // Candidatura — sem autenticação
+  checkCpf: (jobId, cpf) =>
+    api.get(`/jobs/${jobId}/applicants/check`, { params: { cpf } }).then((r) => r.data),
+  apply: (jobId, data) =>
+    api.post(`/jobs/${jobId}/apply`, data).then((r) => r.data),
 };
