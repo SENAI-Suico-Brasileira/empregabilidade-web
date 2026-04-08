@@ -4,267 +4,267 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from "recharts";
 import AreaHeader from "../../components/AreaHeader";
+import RejectModal from "../../components/RejectModal";
 import { useAdmDashboard } from "../../hooks/useAdmDashboard";
 import { useApp } from "../../context/AppContext";
+import { useState } from "react";
 
-// ── Paleta consistente com o design system ────────────────────────────────
-const COLOR_PRIMARY   = "#E30613";
-const COLOR_SUCCESS   = "#16a34a";
-const COLOR_WARNING   = "#d97706";
-const COLOR_INFO      = "#2563EB";
-const COLOR_MUTED     = "#94a3b8";
-const COLOR_PURPLE    = "#7C3AED";
+// ── Design tokens (mirrors CSS variables) ────────────────────────────────────
+const C_RED    = "#E30613";
+const C_GREEN  = "#16a34a";
+const C_AMBER  = "#d97706";
+const C_BLUE   = "#2563EB";
+const C_MUTED  = "#94a3b8";
+const C_PURPLE = "#7C3AED";
+const C_TEAL   = "#0891b2";
 
 const CONTRACT_COLORS = {
-  CLT:        COLOR_PRIMARY,
-  APPRENTICE: COLOR_SUCCESS,
-  INTERNSHIP: COLOR_INFO,
-  PJ:         COLOR_PURPLE,
-  OTHER:      COLOR_MUTED,
+  CLT: C_RED, APPRENTICE: C_GREEN, INTERNSHIP: C_BLUE, PJ: C_PURPLE, OTHER: C_MUTED,
 };
-
 const CONTRACT_LABEL = {
-  CLT:        "CLT",
-  APPRENTICE: "Jovem Aprendiz",
-  INTERNSHIP: "Estágio",
-  PJ:         "PJ",
-  OTHER:      "Outro",
+  CLT: "CLT", APPRENTICE: "Jovem Aprendiz", INTERNSHIP: "Estágio", PJ: "PJ", OTHER: "Outro",
 };
 
-// Tooltip padrão para os gráficos de pizza
-function PieTooltip({ active, payload }) {
+const MODALITY_LABEL = {
+  FIC: "FIC", TECNICO: "Técnico", CAI: "CAI",
+  SUPERIOR: "Superior", POS_GRADUACAO: "Pós-Grad.", EGRESSO: "Egresso",
+};
+const MODALITY_COLORS = [C_RED, C_BLUE, C_GREEN, C_AMBER, C_PURPLE, C_TEAL];
+
+// ── Tooltip padrão ────────────────────────────────────────────────────────────
+function ChartTooltip({ active, payload, unit = "" }) {
   if (!active || !payload?.length) return null;
   return (
     <div className="chart-tooltip">
       <span className="chart-tooltip-label">{payload[0].name}</span>
-      <span className="chart-tooltip-value">{payload[0].value}</span>
+      <span className="chart-tooltip-value">{payload[0].value}{unit}</span>
     </div>
   );
 }
 
-// Label dentro das fatias da pizza (só exibe se fatia >= 10%)
+// Label dentro de fatia de pizza (só para fatias >= 10%)
 function PieLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent, value }) {
   if (percent < 0.1) return null;
-  const rad = Math.PI / 180;
+  const rad    = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.55;
-  const x = cx + radius * Math.cos(-midAngle * rad);
-  const y = cy + radius * Math.sin(-midAngle * rad);
   return (
-    <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central"
-      fontSize={13} fontWeight={700}>
+    <text
+      x={cx + radius * Math.cos(-midAngle * rad)}
+      y={cy + radius * Math.sin(-midAngle * rad)}
+      fill="#fff" textAnchor="middle" dominantBaseline="central"
+      fontSize={13} fontWeight={700}
+    >
       {value}
     </text>
+  );
+}
+
+// ── Componente de KPI ─────────────────────────────────────────────────────────
+function KpiCard({ value, label, accent, sub }) {
+  return (
+    <div className="indicator-card" style={accent ? { borderLeft: `3px solid ${accent}` } : {}}>
+      <span className="indicator-value">{value ?? "—"}</span>
+      <span className="indicator-label">{label}</span>
+      {sub && <span className="indicator-rate">{sub}</span>}
+    </div>
   );
 }
 
 export default function AdmDashboard() {
   const { t } = useApp();
   const { indicators, pendingJobs, loading, approveJob, rejectJob } = useAdmDashboard();
+  const [rejectTarget, setRejectTarget] = useState(null);
+  const [saving, setSaving]             = useState(false);
 
-  async function handleReject(id) {
-    const reason = prompt("Motivo da reprovação (opcional):");
-    await rejectJob(id, reason);
+  async function handleConfirmReject(reason) {
+    setSaving(true);
+    await rejectJob(rejectTarget, reason);
+    setSaving(false);
+    setRejectTarget(null);
   }
 
   if (loading) {
     return (
       <>
-        <AreaHeader areaName="Painel Admin" homeHref="/adm" />
+        <AreaHeader areaName="Painel Administrativo" homeHref="/adm" />
         <p className="loading">Carregando...</p>
       </>
     );
   }
 
-  // ── Dados para os gráficos ──────────────────────────────────────────────
+  // ── Dados derivados ──────────────────────────────────────────────────────────
 
   const totalFilled = (indicators?.filledBySenai ?? 0) + (indicators?.filledByOther ?? 0);
-  const senaiRate = totalFilled > 0
+  const senaiRate   = totalFilled > 0
     ? Math.round((indicators.filledBySenai / totalFilled) * 100)
     : null;
 
-  // Pizza: origem dos candidatos contratados
   const filledByData = totalFilled > 0 ? [
     { name: "Alunos SENAI", value: indicators.filledBySenai },
     { name: "Outros",       value: indicators.filledByOther },
   ] : [];
 
-  // Pizza: distribuição por tipo de contrato (vagas abertas)
   const contractData = Object.entries(indicators?.jobsByContractType ?? {}).map(
     ([type, count]) => ({ name: CONTRACT_LABEL[type] ?? type, value: count, type })
   );
 
-  // Barras horizontais: vagas por categoria (nome traduzido via slug)
   const categoryData = (indicators?.jobsByCategory ?? [])
     .sort((a, b) => b.count - a.count)
     .map((c) => ({
-      name: c.categorySlug ? t(`category.${c.categorySlug}`) : c.categoryName,
+      name:  c.categorySlug ? t(`category.${c.categorySlug}`) : c.categoryName,
       vagas: c.count,
     }));
 
-  // Barras: funil de status das vagas
   const statusOrder = ["ACTIVE", "IN_PROGRESS", "PENDING", "COMPLETED", "INACTIVE", "REJECTED"];
-  const statusLabel  = {
-    ACTIVE:      "Ativas",
-    IN_PROGRESS: "Em andamento",
-    PENDING:     "Pendentes",
-    COMPLETED:   "Preenchidas",
-    INACTIVE:    "Pausadas",
-    REJECTED:    "Reprovadas",
+  const STATUS_LABEL = {
+    ACTIVE: "Ativas", IN_PROGRESS: "Em andamento", PENDING: "Pendentes",
+    COMPLETED: "Preenchidas", INACTIVE: "Pausadas", REJECTED: "Reprovadas",
   };
-  const statusColor = {
-    ACTIVE:      COLOR_SUCCESS,
-    IN_PROGRESS: COLOR_INFO,
-    PENDING:     COLOR_WARNING,
-    COMPLETED:   COLOR_PRIMARY,
-    INACTIVE:    COLOR_MUTED,
-    REJECTED:    "#dc2626",
+  const STATUS_COLOR = {
+    ACTIVE: C_GREEN, IN_PROGRESS: C_BLUE, PENDING: C_AMBER,
+    COMPLETED: C_RED, INACTIVE: C_MUTED, REJECTED: "#dc2626",
   };
   const statusData = statusOrder
     .filter((s) => (indicators?.jobsByStatus?.[s] ?? 0) > 0)
-    .map((s) => ({
-      name:  statusLabel[s],
-      total: indicators.jobsByStatus[s],
-      fill:  statusColor[s],
-    }));
+    .map((s) => ({ name: STATUS_LABEL[s], total: indicators.jobsByStatus[s], fill: STATUS_COLOR[s] }));
+
+  const modalityData = (indicators?.applicationsByModality ?? [])
+    .map((m) => ({ name: MODALITY_LABEL[m.modality] ?? m.modality, value: m.count }))
+    .sort((a, b) => b.value - a.value);
+
+  const topJobsData = (indicators?.topJobsByApplications ?? [])
+    .map((j) => ({ name: j.title.length > 28 ? j.title.slice(0, 28) + "…" : j.title, candidatos: j.count }));
+
+  const totalApplicants   = indicators?.totalApplicants   ?? 0;
+  const totalApplications = indicators?.totalApplications ?? 0;
+  const avgPerJob         = indicators?.avgApplicationsPerJob ?? 0;
+  const hasApplicantsData = totalApplications > 0;
 
   return (
     <>
       <AreaHeader areaName="Painel Administrativo" homeHref="/adm" />
-
       <main className="area-main">
         <div className="page">
 
-          {/* ── KPIs principais ── */}
+          {/* ── Seção 1: KPIs de vagas ── */}
           <section>
-            <h2 className="section-title">Visão Geral</h2>
+            <h2 className="section-title">Visão Geral — Vagas</h2>
             <div className="indicators-grid">
-              <div className="indicator-card indicator-pending">
-                <span className="indicator-value">{indicators?.jobsByStatus?.PENDING ?? 0}</span>
-                <span className="indicator-label">Aguardando aprovação</span>
-              </div>
-              <div className="indicator-card indicator-active">
-                <span className="indicator-value">{indicators?.jobsByStatus?.ACTIVE ?? 0}</span>
-                <span className="indicator-label">Vagas ativas no mural</span>
-              </div>
-              <div className="indicator-card">
-                <span className="indicator-value">{indicators?.totalCompanies ?? 0}</span>
-                <span className="indicator-label">Empresas cadastradas</span>
-              </div>
-              <div className="indicator-card">
-                <span className="indicator-value">{indicators?.companiesWithActiveJobs ?? 0}</span>
-                <span className="indicator-label">Empresas com vagas ativas</span>
-              </div>
-              <div className="indicator-card">
-                <span className="indicator-value">{indicators?.jobsByStatus?.COMPLETED ?? 0}</span>
-                <span className="indicator-label">Vagas preenchidas</span>
-              </div>
-              <div className="indicator-card">
-                <span className="indicator-value">{indicators?.jobsByStatus?.IN_PROGRESS ?? 0}</span>
-                <span className="indicator-label">Seleções em andamento</span>
-              </div>
+              <KpiCard value={indicators?.jobsByStatus?.PENDING ?? 0}     label="Aguardando aprovação" accent={C_AMBER} />
+              <KpiCard value={indicators?.jobsByStatus?.ACTIVE ?? 0}      label="Vagas ativas no mural" accent={C_GREEN} />
+              <KpiCard value={indicators?.jobsByStatus?.IN_PROGRESS ?? 0} label="Seleções em andamento" accent={C_BLUE} />
+              <KpiCard value={indicators?.jobsByStatus?.COMPLETED ?? 0}   label="Vagas preenchidas" accent={C_RED}
+                sub={senaiRate !== null ? `${senaiRate}% por alunos SENAI` : null} />
+              <KpiCard value={indicators?.totalCompanies ?? 0}            label="Empresas cadastradas" />
+              <KpiCard value={indicators?.companiesWithActiveJobs ?? 0}   label="Empresas com vagas ativas" />
             </div>
           </section>
 
-          {/* ── Gráficos lado a lado ── */}
-          <section>
-            <div className="charts-row">
+          {/* ── Seção 2: KPIs de candidaturas ── */}
+          {hasApplicantsData && (
+            <section>
+              <h2 className="section-title">Visão Geral — Candidaturas</h2>
+              <div className="indicators-grid">
+                <KpiCard value={totalApplicants}   label="Candidatos cadastrados" accent={C_TEAL} />
+                <KpiCard value={totalApplications} label="Candidaturas realizadas" accent={C_PURPLE} />
+                <KpiCard value={avgPerJob}          label="Média de candidatos por vaga" />
+              </div>
+            </section>
+          )}
 
-              {/* Funil de status: bar chart horizontal — boa para comparar magnitudes */}
-              {statusData.length > 0 && (
-                <div className="chart-card">
-                  <h3 className="chart-title">Status das Vagas</h3>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <BarChart
-                      data={statusData}
-                      layout="vertical"
-                      margin={{ top: 0, right: 24, left: 8, bottom: 0 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                      <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
-                      <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={100} />
-                      <Tooltip
-                        formatter={(v) => [v, "vagas"]}
-                        contentStyle={{ fontSize: 13, borderRadius: 8 }}
-                      />
-                      <Bar dataKey="total" radius={[0, 4, 4, 0]} maxBarSize={20}>
-                        {statusData.map((entry) => (
-                          <Cell key={entry.name} fill={entry.fill} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
-
-              {/* Tipo de contrato: pizza — boa para distribuição proporcional */}
-              {contractData.length > 0 && (
-                <div className="chart-card">
-                  <h3 className="chart-title">Tipos de Contrato (vagas abertas)</h3>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <PieChart>
-                      <Pie
-                        data={contractData}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                        labelLine={false}
-                        label={PieLabel}
-                      >
-                        {contractData.map((entry) => (
-                          <Cell key={entry.type} fill={CONTRACT_COLORS[entry.type] ?? COLOR_MUTED} />
-                        ))}
-                      </Pie>
-                      <Tooltip content={<PieTooltip />} />
-                      <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
-
-            </div>
-          </section>
-
-          {/* ── Origem dos candidatos contratados ── */}
-          {filledByData.length > 0 && (
+          {/* ── Seção 3: Status × Tipo de Contrato ── */}
+          {(statusData.length > 0 || contractData.length > 0) && (
             <section>
               <div className="charts-row">
 
-                {/* Pizza: proporção SENAI vs outros — simples e direto */}
-                <div className="chart-card">
-                  <h3 className="chart-title">Origem dos Candidatos Contratados</h3>
-                  <div className="chart-with-kpi">
-                    <ResponsiveContainer width="100%" height={200}>
+                {statusData.length > 0 && (
+                  <div className="chart-card">
+                    <h3 className="chart-title">Status das Vagas</h3>
+                    <ResponsiveContainer width="100%" height={230}>
+                      <BarChart
+                        data={statusData}
+                        layout="vertical"
+                        margin={{ top: 0, right: 28, left: 8, bottom: 0 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                        <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                        <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={105} />
+                        <Tooltip
+                          formatter={(v) => [v, "vagas"]}
+                          contentStyle={{ fontSize: 13, borderRadius: 8 }}
+                        />
+                        <Bar dataKey="total" radius={[0, 4, 4, 0]} maxBarSize={20}>
+                          {statusData.map((e) => <Cell key={e.name} fill={e.fill} />)}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+
+                {contractData.length > 0 && (
+                  <div className="chart-card">
+                    <h3 className="chart-title">Tipos de Contrato (vagas em aberto)</h3>
+                    <ResponsiveContainer width="100%" height={230}>
                       <PieChart>
                         <Pie
-                          data={filledByData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={50}
-                          outerRadius={80}
+                          data={contractData}
+                          cx="50%" cy="50%"
+                          outerRadius={82}
                           dataKey="value"
                           labelLine={false}
                           label={PieLabel}
                         >
-                          <Cell fill={COLOR_SUCCESS} />
-                          <Cell fill={COLOR_MUTED} />
+                          {contractData.map((e) => (
+                            <Cell key={e.type} fill={CONTRACT_COLORS[e.type] ?? C_MUTED} />
+                          ))}
                         </Pie>
-                        <Tooltip content={<PieTooltip />} />
+                        <Tooltip content={<ChartTooltip />} />
                         <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} />
                       </PieChart>
                     </ResponsiveContainer>
-                    {senaiRate !== null && (
-                      <div className="chart-kpi">
-                        <span className="chart-kpi-value" style={{ color: COLOR_SUCCESS }}>
-                          {senaiRate}%
-                        </span>
-                        <span className="chart-kpi-label">das vagas preenchidas por alunos SENAI</span>
-                      </div>
-                    )}
                   </div>
-                </div>
+                )}
 
-                {/* Vagas por área: bar chart horizontal — boa para comparar categorias */}
+              </div>
+            </section>
+          )}
+
+          {/* ── Seção 4: Origem dos contratados × Vagas por área ── */}
+          {(filledByData.length > 0 || categoryData.length > 0) && (
+            <section>
+              <div className="charts-row">
+
+                {filledByData.length > 0 && (
+                  <div className="chart-card">
+                    <h3 className="chart-title">Origem dos Candidatos Contratados</h3>
+                    <div className="chart-with-kpi">
+                      <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                          <Pie
+                            data={filledByData}
+                            cx="50%" cy="50%"
+                            innerRadius={48} outerRadius={80}
+                            dataKey="value"
+                            labelLine={false}
+                            label={PieLabel}
+                          >
+                            <Cell fill={C_GREEN} />
+                            <Cell fill={C_MUTED} />
+                          </Pie>
+                          <Tooltip content={<ChartTooltip />} />
+                          <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                      {senaiRate !== null && (
+                        <div className="chart-kpi">
+                          <span className="chart-kpi-value" style={{ color: C_GREEN }}>{senaiRate}%</span>
+                          <span className="chart-kpi-label">preenchidas por alunos SENAI</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {categoryData.length > 0 && (
                   <div className="chart-card">
                     <h3 className="chart-title">Vagas Ativas por Área</h3>
@@ -272,16 +272,16 @@ export default function AdmDashboard() {
                       <BarChart
                         data={categoryData}
                         layout="vertical"
-                        margin={{ top: 0, right: 24, left: 8, bottom: 0 }}
+                        margin={{ top: 0, right: 28, left: 8, bottom: 0 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                         <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
-                        <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={90} />
+                        <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={92} />
                         <Tooltip
                           formatter={(v) => [v, "vagas"]}
                           contentStyle={{ fontSize: 13, borderRadius: 8 }}
                         />
-                        <Bar dataKey="vagas" fill={COLOR_PRIMARY} radius={[0, 4, 4, 0]} maxBarSize={18} />
+                        <Bar dataKey="vagas" fill={C_RED} radius={[0, 4, 4, 0]} maxBarSize={18} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -291,34 +291,67 @@ export default function AdmDashboard() {
             </section>
           )}
 
-          {/* Se não há dados de preenchimento, exibe só o gráfico de áreas */}
-          {filledByData.length === 0 && categoryData.length > 0 && (
+          {/* ── Seção 5: BI de Candidaturas ── */}
+          {hasApplicantsData && (
             <section>
+              <h2 className="section-title">Análise de Candidaturas</h2>
               <div className="charts-row">
-                <div className="chart-card">
-                  <h3 className="chart-title">Vagas Ativas por Área</h3>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <BarChart
-                      data={categoryData}
-                      layout="vertical"
-                      margin={{ top: 0, right: 24, left: 8, bottom: 0 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                      <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
-                      <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={90} />
-                      <Tooltip
-                        formatter={(v) => [v, "vagas"]}
-                        contentStyle={{ fontSize: 13, borderRadius: 8 }}
-                      />
-                      <Bar dataKey="vagas" fill={COLOR_PRIMARY} radius={[0, 4, 4, 0]} maxBarSize={18} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+
+                {/* Candidaturas por modalidade de ensino */}
+                {modalityData.length > 0 && (
+                  <div className="chart-card">
+                    <h3 className="chart-title">Candidatos por Modalidade de Ensino</h3>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <BarChart
+                        data={modalityData}
+                        layout="vertical"
+                        margin={{ top: 0, right: 28, left: 8, bottom: 0 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                        <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                        <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={80} />
+                        <Tooltip
+                          formatter={(v) => [v, "candidatos"]}
+                          contentStyle={{ fontSize: 13, borderRadius: 8 }}
+                        />
+                        <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={22}>
+                          {modalityData.map((_, i) => (
+                            <Cell key={i} fill={MODALITY_COLORS[i % MODALITY_COLORS.length]} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+
+                {/* Top vagas com mais candidaturas */}
+                {topJobsData.length > 0 && (
+                  <div className="chart-card">
+                    <h3 className="chart-title">Top Vagas por Candidaturas</h3>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <BarChart
+                        data={topJobsData}
+                        layout="vertical"
+                        margin={{ top: 0, right: 28, left: 8, bottom: 0 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                        <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                        <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={115} />
+                        <Tooltip
+                          formatter={(v) => [v, "candidatos"]}
+                          contentStyle={{ fontSize: 13, borderRadius: 8 }}
+                        />
+                        <Bar dataKey="candidatos" fill={C_PURPLE} radius={[0, 4, 4, 0]} maxBarSize={20} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+
               </div>
             </section>
           )}
 
-          {/* ── Fila de aprovação ── */}
+          {/* ── Seção 6: Fila de aprovação ── */}
           <section>
             <div className="section-header">
               <h2 className="section-title">Vagas Pendentes de Aprovação</h2>
@@ -351,10 +384,10 @@ export default function AdmDashboard() {
                       <td>{new Date(job.createdAt).toLocaleDateString("pt-BR")}</td>
                       <td className="table-actions">
                         <button className="btn btn-sm btn-success" onClick={() => approveJob(job.id)}>
-                          Aprovar
+                          {t("common.approve")}
                         </button>
-                        <button className="btn btn-sm btn-danger" onClick={() => handleReject(job.id)}>
-                          Reprovar
+                        <button className="btn btn-sm btn-danger" onClick={() => setRejectTarget(job.id)}>
+                          {t("common.reject")}
                         </button>
                       </td>
                     </tr>
@@ -366,6 +399,14 @@ export default function AdmDashboard() {
 
         </div>
       </main>
+
+      {rejectTarget && (
+        <RejectModal
+          onConfirm={handleConfirmReject}
+          onCancel={() => setRejectTarget(null)}
+          saving={saving}
+        />
+      )}
     </>
   );
 }
