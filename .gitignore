@@ -1,6 +1,10 @@
 # Variáveis de ambiente — nunca versionar
 .env
-.env.*
+.env.local
+.env.development
+.env.development.local
+.env.production.local
+!.env.production
 !.env.example
 
 # Logs
