@@ -10,9 +10,10 @@ import { useAuth } from "../hooks/useAuth";
 export default function AreaHeader({ areaName, homeHref }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const isCompany = homeHref.startsWith("/empresas");
 
   function handleLogout() {
-    const loginPath = homeHref.startsWith("/adm") ? "/adm/login" : "/empresas/login";
+    const loginPath = isCompany ? "/empresas/login" : "/adm/login";
     logout();
     navigate(loginPath);
   }
@@ -28,7 +29,13 @@ export default function AreaHeader({ areaName, homeHref }) {
       </div>
 
       <div className="area-header-user">
-        <span className="area-header-username">{user?.name}</span>
+        {isCompany ? (
+          <Link to="/empresas/conta" className="area-header-username area-header-username-link" title="Minha conta">
+            {user?.name}
+          </Link>
+        ) : (
+          <span className="area-header-username">{user?.name}</span>
+        )}
         <Link to="/mural" className="btn btn-ghost btn-sm">Ver mural</Link>
         <button onClick={handleLogout} className="btn btn-outline btn-sm">Sair</button>
       </div>

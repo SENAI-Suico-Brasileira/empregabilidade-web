@@ -7,6 +7,7 @@ import api from "./api";
 export const companyService = {
   getProfile: () => api.get("/empresa/perfil").then((r) => r.data),
   updateProfile: (data) => api.put("/empresa/perfil", data).then((r) => r.data),
+  changePassword: (data) => api.put("/empresa/perfil/senha", data).then((r) => r.data),
 
   listJobs: () => api.get("/empresa/vagas").then((r) => r.data),
   listCompletedTemplates: () => api.get("/empresa/vagas/templates").then((r) => r.data),

@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { admService } from "../services/admService";
 
-/**
- * Lista de empresas e criação de nova empresa para o painel admin.
- * Retorna `createCompany` que resolve `true` em sucesso e `false` em erro.
- */
 export function useAdmEmpresas() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,5 +32,57 @@ export function useAdmEmpresas() {
     }
   }
 
-  return { companies, loading, saving, error, createCompany };
+  async function updateCompany(id, formData) {
+    setError("");
+    setSaving(true);
+    try {
+      const updated = await admService.updateCompany(id, formData);
+      setCompanies((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, ...updated } : c))
+      );
+      return true;
+    } catch (err) {
+      setError(err.response?.data?.message || "Erro ao atualizar empresa.");
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function toggleCompanyActive(id) {
+    try {
+      const { active } = await admService.toggleCompanyActive(id);
+      setCompanies((prev) =>
+        prev.map((c) =>
+          c.id === id ? { ...c, user: { ...c.user, active } } : c
+        )
+      );
+      return true;
+    } catch (err) {
+      setError(err.response?.data?.message || "Erro ao alterar status da empresa.");
+      return false;
+    }
+  }
+
+  async function resetCompanyPassword(id, newPassword) {
+    try {
+      await admService.resetCompanyPassword(id, newPassword);
+      return true;
+    } catch (err) {
+      setError(err.response?.data?.message || "Erro ao redefinir senha.");
+      return false;
+    }
+  }
+
+  return {
+    companies,
+    loading,
+    saving,
+    error,
+    setError,
+    createCompany,
+    updateCompany,
+    toggleCompanyActive,
+    resetCompanyPassword,
+  };
 }

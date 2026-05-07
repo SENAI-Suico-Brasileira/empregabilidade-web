@@ -18,6 +18,7 @@ import AdmLayout from "./components/AdmLayout";
 import EmpresaLoginPage from "./pages/empresas/LoginPage";
 import EmpresaDashboard from "./pages/empresas/Dashboard";
 import EmpresaCreateJobPage from "./pages/empresas/CreateJobPage";
+import EmpresaContaPage from "./pages/empresas/ContaPage";
 
 import "./App.css";
 
@@ -53,6 +54,7 @@ export default function App() {
           <Route path="/empresas/login" element={<EmpresaLoginPage />} />
           <Route path="/empresas" element={<PrivateRoute role="COMPANY"><EmpresaDashboard /></PrivateRoute>} />
           <Route path="/empresas/vagas/nova" element={<PrivateRoute role="COMPANY"><EmpresaCreateJobPage /></PrivateRoute>} />
+          <Route path="/empresas/conta" element={<PrivateRoute role="COMPANY"><EmpresaContaPage /></PrivateRoute>} />
         </Routes>
 
         {/* Widget de acessibilidade disponível em todas as páginas */}

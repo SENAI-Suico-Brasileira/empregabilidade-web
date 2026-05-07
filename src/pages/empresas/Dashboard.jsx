@@ -5,6 +5,7 @@ import { useCompanyJobs } from "../../hooks/useCompanyJobs";
 import { useApp } from "../../context/AppContext";
 import { companyService } from "../../services/companyService";
 
+
 const STATUS_LABEL = {
   PENDING: "Aguardando aprovação",
   ACTIVE: "Ativa",
@@ -43,6 +44,7 @@ const MODALITY_LABEL = {
 export default function EmpresaDashboard() {
   const { t, lang } = useApp();
   const { jobs, loading, updateJobStatus } = useCompanyJobs();
+
   const dateLocale = DATE_LOCALE[lang] || "pt-BR";
 
   const [pendingAction, setPendingAction] = useState(null);
