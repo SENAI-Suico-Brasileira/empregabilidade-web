@@ -136,37 +136,44 @@ export default function AdmDashboard() {
 
   return (
     <div className="adm-page">
-      <div className="page">
+
+      <div className="adm-page-header">
+        <div className="adm-page-header-text">
+          <h1 className="adm-page-title">Painel</h1>
+          <p className="adm-page-desc">Visão geral da plataforma de empregabilidade</p>
+        </div>
+      </div>
 
           {/* ── Seção 1: KPIs de vagas ── */}
-          <section>
-            <h2 className="section-title">Visão Geral — Vagas</h2>
+          <section className="adm-section">
+            <h2 className="adm-section-title">Vagas</h2>
             <div className="indicators-grid">
               <KpiCard value={indicators?.jobsByStatus?.PENDING ?? 0}     label="Aguardando aprovação" accent={C_AMBER} />
-              <KpiCard value={indicators?.jobsByStatus?.ACTIVE ?? 0}      label="Vagas ativas no mural" accent={C_GREEN} />
+              <KpiCard value={indicators?.jobsByStatus?.ACTIVE ?? 0}      label="Ativas no mural" accent={C_GREEN} />
               <KpiCard value={indicators?.jobsByStatus?.IN_PROGRESS ?? 0} label="Seleções em andamento" accent={C_BLUE} />
               <KpiCard value={indicators?.jobsByStatus?.COMPLETED ?? 0}   label="Vagas preenchidas" accent={C_RED}
                 sub={senaiRate !== null ? `${senaiRate}% por alunos SENAI` : null} />
               <KpiCard value={indicators?.totalCompanies ?? 0}            label="Empresas cadastradas" />
-              <KpiCard value={indicators?.companiesWithActiveJobs ?? 0}   label="Empresas com vagas ativas" />
+              <KpiCard value={indicators?.companiesWithActiveJobs ?? 0}   label="Com vagas ativas" />
             </div>
           </section>
 
           {/* ── Seção 2: KPIs de candidaturas ── */}
           {hasApplicantsData && (
-            <section>
-              <h2 className="section-title">Visão Geral — Candidaturas</h2>
+            <section className="adm-section">
+              <h2 className="adm-section-title">Candidaturas</h2>
               <div className="indicators-grid">
                 <KpiCard value={totalApplicants}   label="Candidatos cadastrados" accent={C_TEAL} />
                 <KpiCard value={totalApplications} label="Candidaturas realizadas" accent={C_PURPLE} />
-                <KpiCard value={avgPerJob}          label="Média de candidatos por vaga" />
+                <KpiCard value={avgPerJob}          label="Média por vaga" />
               </div>
             </section>
           )}
 
           {/* ── Seção 3: Status × Tipo de Contrato ── */}
           {(statusData.length > 0 || contractData.length > 0) && (
-            <section>
+            <section className="adm-section">
+              <h2 className="adm-section-title">Distribuição de Vagas</h2>
               <div className="charts-row">
 
                 {statusData.length > 0 && (
@@ -223,7 +230,8 @@ export default function AdmDashboard() {
 
           {/* ── Seção 4: Origem dos contratados × Vagas por área ── */}
           {(filledByData.length > 0 || categoryData.length > 0) && (
-            <section>
+            <section className="adm-section">
+              <h2 className="adm-section-title">Resultados</h2>
               <div className="charts-row">
 
                 {filledByData.length > 0 && (
@@ -285,8 +293,8 @@ export default function AdmDashboard() {
 
           {/* ── Seção 5: BI de Candidaturas ── */}
           {hasApplicantsData && (
-            <section>
-              <h2 className="section-title">Análise de Candidaturas</h2>
+            <section className="adm-section">
+              <h2 className="adm-section-title">Análise de Candidaturas</h2>
               <div className="charts-row">
 
                 {/* Candidaturas por modalidade de ensino */}
@@ -344,9 +352,9 @@ export default function AdmDashboard() {
           )}
 
           {/* ── Seção 6: Fila de aprovação ── */}
-          <section>
+          <section className="adm-section">
             <div className="section-header">
-              <h2 className="section-title">Vagas Pendentes de Aprovação</h2>
+              <h2 className="adm-section-title">Vagas Pendentes de Aprovação</h2>
               <Link to="/adm/vagas" className="btn btn-outline btn-sm">Ver todas</Link>
             </div>
 
@@ -388,8 +396,6 @@ export default function AdmDashboard() {
               </table>
             )}
           </section>
-
-        </div>
 
       {rejectTarget && (
         <RejectModal

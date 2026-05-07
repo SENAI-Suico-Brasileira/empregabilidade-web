@@ -67,21 +67,25 @@ export default function AdmVagasPage() {
 
   return (
     <div className="adm-page">
-      <div className="page">
-          <div className="section-header">
-            <h2 className="section-title">Todas as Vagas</h2>
-            <select
-              className="filter-select"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              aria-label="Filtrar por status"
-            >
-              <option value="">Todos os status</option>
-              {Object.entries(STATUS_LABEL).map(([val, label]) => (
-                <option key={val} value={val}>{label}</option>
-              ))}
-            </select>
-          </div>
+      <div className="adm-page-header">
+        <div className="adm-page-header-text">
+          <h1 className="adm-page-title">Vagas</h1>
+          <p className="adm-page-desc">Aprovação, rejeição e acompanhamento de todas as vagas</p>
+        </div>
+        <select
+          className="filter-select"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          aria-label="Filtrar por status"
+        >
+          <option value="">Todos os status</option>
+          {Object.entries(STATUS_LABEL).map(([val, label]) => (
+            <option key={val} value={val}>{label}</option>
+          ))}
+        </select>
+      </div>
+
+      <section className="adm-section">
 
           {loading ? (
             <p className="loading" role="status">Carregando...</p>
@@ -205,7 +209,7 @@ export default function AdmVagasPage() {
               </tbody>
             </table>
           )}
-        </div>
+      </section>
 
       {rejectTarget && (
         <RejectModal

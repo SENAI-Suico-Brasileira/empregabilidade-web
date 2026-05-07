@@ -31,19 +31,22 @@ export default function AdmEmpresasPage() {
 
   return (
     <div className="adm-page">
-      <div className="page">
-          <div className="section-header">
-            <h2 className="section-title">Empresas Parceiras</h2>
-            <button className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
-              {showForm ? "Cancelar" : "+ Nova Empresa"}
-            </button>
-          </div>
+      <div className="adm-page-header">
+        <div className="adm-page-header-text">
+          <h1 className="adm-page-title">Empresas</h1>
+          <p className="adm-page-desc">Cadastro e gestão das empresas parceiras</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
+          {showForm ? "Cancelar" : "+ Nova Empresa"}
+        </button>
+      </div>
 
-          {/* Formulário de cadastro */}
-          {showForm && (
-            <form className="job-form" onSubmit={handleSubmit}>
-              <h3>Cadastrar Nova Empresa</h3>
-              {error && <p className="form-error">{error}</p>}
+      {/* Formulário de cadastro */}
+      {showForm && (
+        <section className="adm-section">
+          <h2 className="adm-section-title">Nova Empresa</h2>
+          <form className="job-form" onSubmit={handleSubmit}>
+            {error && <p className="form-error">{error}</p>}
 
               <fieldset className="form-section">
                 <legend>Dados da Empresa</legend>
@@ -85,42 +88,47 @@ export default function AdmEmpresasPage() {
                 </div>
               </fieldset>
 
-              <div className="form-actions">
-                <button type="submit" className="btn btn-primary" disabled={saving}>
-                  {saving ? "Salvando..." : "Cadastrar Empresa"}
-                </button>
-              </div>
-            </form>
-          )}
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary" disabled={saving}>
+                {saving ? "Salvando..." : "Cadastrar Empresa"}
+              </button>
+            </div>
+          </form>
+        </section>
+      )}
 
-          {/* Tabela de empresas */}
-          {loading ? (
-            <p className="loading">Carregando...</p>
-          ) : (
-            <table className="jobs-table">
-              <thead>
-                <tr>
-                  <th>Empresa</th>
-                  <th>CNPJ</th>
-                  <th>Responsável</th>
-                  <th>E-mail</th>
-                  <th>Vagas</th>
+      {/* Tabela de empresas */}
+      <section className="adm-section">
+        <h2 className="adm-section-title">Empresas Cadastradas</h2>
+        {loading ? (
+          <p className="loading">Carregando...</p>
+        ) : companies.length === 0 ? (
+          <p className="empty">Nenhuma empresa cadastrada ainda.</p>
+        ) : (
+          <table className="jobs-table">
+            <thead>
+              <tr>
+                <th>Empresa</th>
+                <th>CNPJ</th>
+                <th>Responsável</th>
+                <th>E-mail</th>
+                <th>Vagas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {companies.map((c) => (
+                <tr key={c.id}>
+                  <td>{c.name}</td>
+                  <td>{c.cnpj ?? "—"}</td>
+                  <td>{c.user?.name}</td>
+                  <td>{c.user?.email}</td>
+                  <td>{c._count?.jobs ?? 0}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {companies.map((c) => (
-                  <tr key={c.id}>
-                    <td>{c.name}</td>
-                    <td>{c.cnpj ?? "—"}</td>
-                    <td>{c.user?.name}</td>
-                    <td>{c.user?.email}</td>
-                    <td>{c._count?.jobs ?? 0}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
     </div>
   );
 }

@@ -118,7 +118,7 @@ export default function A11yWidget() {
           <div className="a11y-section">
             <span className="a11y-section-label">{t("a11y.libras")}</span>
             <p className="a11y-libras-note">
-              Clique no botão ao lado (esquerda) para ativar a tradução em Libras.
+              Clique no botão VLibras no canto inferior esquerdo para ativar a tradução em Libras.
             </p>
           </div>
         </div>
@@ -132,11 +132,10 @@ export default function A11yWidget() {
         aria-expanded={open}
         title={t("a11y.open")}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-          strokeLinejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 8v4M12 16h.01" />
+        {/* Símbolo internacional de acessibilidade */}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <circle cx="12" cy="3.5" r="1.75" />
+          <path d="M17 7.5H7a1 1 0 0 0 0 2h3.5l-1.2 4.2-3.1 5.4a1 1 0 1 0 1.74 1l2.86-5h2.4l2.86 5a1 1 0 1 0 1.74-1l-3.1-5.4L13.5 9.5H17a1 1 0 0 0 0-2z" />
         </svg>
       </button>
     </div>
