@@ -3,7 +3,6 @@ import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from "recharts";
-import AreaHeader from "../../components/AreaHeader";
 import RejectModal from "../../components/RejectModal";
 import { useAdmDashboard } from "../../hooks/useAdmDashboard";
 import { useApp } from "../../context/AppContext";
@@ -84,12 +83,7 @@ export default function AdmDashboard() {
   }
 
   if (loading) {
-    return (
-      <>
-        <AreaHeader areaName="Painel Administrativo" homeHref="/adm" />
-        <p className="loading">Carregando...</p>
-      </>
-    );
+    return <p className="loading" style={{ padding: "2rem" }}>Carregando...</p>;
   }
 
   // ── Dados derivados ──────────────────────────────────────────────────────────
@@ -141,10 +135,8 @@ export default function AdmDashboard() {
   const hasApplicantsData = totalApplications > 0;
 
   return (
-    <>
-      <AreaHeader areaName="Painel Administrativo" homeHref="/adm" />
-      <main className="area-main">
-        <div className="page">
+    <div className="adm-page">
+      <div className="page">
 
           {/* ── Seção 1: KPIs de vagas ── */}
           <section>
@@ -398,7 +390,6 @@ export default function AdmDashboard() {
           </section>
 
         </div>
-      </main>
 
       {rejectTarget && (
         <RejectModal
@@ -407,6 +398,6 @@ export default function AdmDashboard() {
           saving={saving}
         />
       )}
-    </>
+    </div>
   );
 }

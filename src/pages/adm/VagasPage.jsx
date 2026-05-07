@@ -1,5 +1,4 @@
 import { useState } from "react";
-import AreaHeader from "../../components/AreaHeader";
 import RejectModal from "../../components/RejectModal";
 import { useAdmVagas } from "../../hooks/useAdmVagas";
 import { useApp } from "../../context/AppContext";
@@ -67,10 +66,8 @@ export default function AdmVagasPage() {
   }
 
   return (
-    <>
-      <AreaHeader areaName="Gestão de Vagas" homeHref="/adm" />
-      <main id="main-content" className="area-main">
-        <div className="page">
+    <div className="adm-page">
+      <div className="page">
           <div className="section-header">
             <h2 className="section-title">Todas as Vagas</h2>
             <select
@@ -209,7 +206,6 @@ export default function AdmVagasPage() {
             </table>
           )}
         </div>
-      </main>
 
       {rejectTarget && (
         <RejectModal
@@ -218,6 +214,6 @@ export default function AdmVagasPage() {
           saving={saving}
         />
       )}
-    </>
+    </div>
   );
 }

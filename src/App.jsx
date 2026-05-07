@@ -12,6 +12,7 @@ import AdmLoginPage from "./pages/adm/LoginPage";
 import AdmDashboard from "./pages/adm/Dashboard";
 import AdmVagasPage from "./pages/adm/VagasPage";
 import AdmEmpresasPage from "./pages/adm/EmpresasPage";
+import AdmLayout from "./components/AdmLayout";
 
 // Área da empresa
 import EmpresaLoginPage from "./pages/empresas/LoginPage";
@@ -42,9 +43,11 @@ export default function App() {
 
           {/* ── Área administrativa (/adm) ── */}
           <Route path="/adm/login" element={<AdmLoginPage />} />
-          <Route path="/adm" element={<PrivateRoute role="ADMIN"><AdmDashboard /></PrivateRoute>} />
-          <Route path="/adm/vagas" element={<PrivateRoute role="ADMIN"><AdmVagasPage /></PrivateRoute>} />
-          <Route path="/adm/empresas" element={<PrivateRoute role="ADMIN"><AdmEmpresasPage /></PrivateRoute>} />
+          <Route element={<PrivateRoute role="ADMIN"><AdmLayout /></PrivateRoute>}>
+            <Route path="/adm" element={<AdmDashboard />} />
+            <Route path="/adm/vagas" element={<AdmVagasPage />} />
+            <Route path="/adm/empresas" element={<AdmEmpresasPage />} />
+          </Route>
 
           {/* ── Área da empresa (/empresas) ── */}
           <Route path="/empresas/login" element={<EmpresaLoginPage />} />

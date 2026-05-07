@@ -1,5 +1,4 @@
 import { useState } from "react";
-import AreaHeader from "../../components/AreaHeader";
 import { useAdmEmpresas } from "../../hooks/useAdmEmpresas";
 
 const INITIAL_FORM = {
@@ -31,10 +30,8 @@ export default function AdmEmpresasPage() {
   }
 
   return (
-    <>
-      <AreaHeader areaName="Gestão de Empresas" homeHref="/adm" />
-      <main className="area-main">
-        <div className="page">
+    <div className="adm-page">
+      <div className="page">
           <div className="section-header">
             <h2 className="section-title">Empresas Parceiras</h2>
             <button className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
@@ -124,7 +121,6 @@ export default function AdmEmpresasPage() {
             </table>
           )}
         </div>
-      </main>
-    </>
+    </div>
   );
 }
