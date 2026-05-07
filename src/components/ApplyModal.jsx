@@ -22,6 +22,7 @@ const INITIAL_FORM = {
   className:       "",
   classYear:       "",
   classSemester:   "",
+  classHours:      "",
   courseCompleted: false,
   lgpdConsent:     false,
 };
@@ -42,10 +43,18 @@ export default function ApplyModal({ job, onClose }) {
       const next = { ...prev, [name]: type === "checkbox" ? checked : value };
       if (name === "modality" && value === "EGRESSO") {
         next.classSemester   = "";
+        next.classHours      = "";
         next.courseCompleted = true;
+      }
+      if (name === "modality" && value === "FIC") {
+        next.classSemester   = "";
+        next.courseCompleted = false;
       }
       if (name === "modality" && prev.modality === "EGRESSO" && value !== "EGRESSO") {
         next.courseCompleted = false;
+      }
+      if (name === "modality" && prev.modality === "FIC" && value !== "FIC") {
+        next.classHours = "";
       }
       if (name === "courseCompleted" && checked) {
         next.classSemester = "";
@@ -82,7 +91,8 @@ export default function ApplyModal({ job, onClose }) {
           modality:        result.modality         || "",
           className:       result.className        || "",
           classYear:       result.classYear   ? String(result.classYear)  : "",
-          classSemester:   result.classSemester    || "",
+          classSemester:   result.classSemester || "",
+          classHours:      result.classHours ? String(result.classHours) : "",
           courseCompleted: Boolean(result.courseCompleted),
         }));
         setReturning(true);
@@ -108,7 +118,8 @@ export default function ApplyModal({ job, onClose }) {
         modality:        form.modality,
         className:       form.className       || undefined,
         classYear:       form.classYear       || undefined,
-        classSemester:   form.classSemester   || undefined,
+        classSemester:   form.classSemester || undefined,
+        classHours:      form.classHours    || undefined,
         courseCompleted: form.courseCompleted,
         lgpdConsent:     true,
       });
@@ -126,7 +137,9 @@ export default function ApplyModal({ job, onClose }) {
   }
 
   const isEgresso    = form.modality === "EGRESSO";
-  const showSemester = form.modality && !isEgresso && !form.courseCompleted;
+  const isFic        = form.modality === "FIC";
+  const showSemester = form.modality && !isEgresso && !isFic && !form.courseCompleted;
+  const showHours    = isFic;
   const hasContact   = contact &&
     (contact.contactEmail || contact.contactPhone || contact.contactLink || contact.applicationLink);
 
@@ -312,6 +325,20 @@ export default function ApplyModal({ job, onClose }) {
                           <option key={s} value={s}>{s}º semestre</option>
                         ))}
                       </select>
+                    </div>
+                  )}
+
+                  {showHours && (
+                    <div className="form-group">
+                      <label htmlFor="apply-hours">{t("apply.hoursLabel")}</label>
+                      <input
+                        id="apply-hours"
+                        name="classHours"
+                        value={form.classHours}
+                        onChange={handleChange}
+                        inputMode="numeric"
+                        placeholder="Ex: 160"
+                      />
                     </div>
                   )}
 

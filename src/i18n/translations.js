@@ -120,6 +120,7 @@ export const translations = {
     "apply.sectionPersonal": "Dados pessoais",
     "apply.sectionAcademic": "Dados acadêmicos",
     "apply.semesterLabel":   "Semestre atual",
+    "apply.hoursLabel":      "Carga horária (horas)",
     "apply.courseCompleted": "Já concluí este curso",
     "apply.successNoContact":"Aguarde o contato da empresa.",
 
@@ -253,6 +254,7 @@ export const translations = {
     "apply.sectionPersonal": "Personal information",
     "apply.sectionAcademic": "Academic information",
     "apply.semesterLabel":   "Current semester",
+    "apply.hoursLabel":      "Course hours",
     "apply.courseCompleted": "I have already completed this course",
     "apply.successNoContact":"The company will contact you soon.",
 
@@ -386,6 +388,7 @@ export const translations = {
     "apply.sectionPersonal": "Datos personales",
     "apply.sectionAcademic": "Datos académicos",
     "apply.semesterLabel":   "Semestre actual",
+    "apply.hoursLabel":      "Horas del curso",
     "apply.courseCompleted": "Ya he concluido este curso",
     "apply.successNoContact":"La empresa se pondrá en contacto contigo pronto.",
 
