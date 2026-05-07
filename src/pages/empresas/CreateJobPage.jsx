@@ -76,6 +76,10 @@ export default function EmpresaCreateJobPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!form.contactEmail && !form.contactPhone && !form.contactLink) {
+      setError("Informe ao menos uma forma de contato (e-mail, telefone ou link de inscrição).");
+      return;
+    }
     if (!form.lgpdConsent || !form.senaiDisclaimer) {
       setError("Você precisa aceitar ambos os termos antes de cadastrar a vaga.");
       return;
@@ -239,7 +243,7 @@ export default function EmpresaCreateJobPage() {
                 </div>
               </div>
               <p className="field-hint" style={{ marginTop: 0 }}>
-                Preencha abaixo os dados de contato que serão revelados ao candidato somente após ele se candidatar pelo mural.
+                Preencha ao menos uma forma de contato abaixo — as informações serão reveladas ao candidato somente após ele se candidatar pelo mural. <strong>Obrigatório: e-mail, telefone ou link.</strong>
               </p>
               <div className="form-row">
                 <div className="form-group">
