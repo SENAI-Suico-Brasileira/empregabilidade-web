@@ -102,6 +102,9 @@ textarea { resize: vertical; }
 .area-header-nav-link:hover { color: var(--color-text); background: var(--color-surface-hover, #f1f5f9); }
 .area-header-nav-link.active { color: var(--color-primary); font-weight: 700; }
 
+/* ── VLibras — garante que fica acima do sidebar ── */
+[vw] { z-index: 99999 !important; }
+
 /* ── Admin Sidebar Layout ──────────────────── */
 .adm-layout {
   display: flex;
