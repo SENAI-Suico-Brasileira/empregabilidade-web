@@ -55,9 +55,11 @@ textarea { resize: vertical; }
 /* .area-main é o wrapper de conteúdo usado em TODAS as telas */
 .area-main {
   width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
   padding: 2rem var(--layout-padding);
 }
-.page { display: flex; flex-direction: column; gap: 2rem; }
+.page { display: flex; flex-direction: column; gap: 2rem; min-width: 0; overflow-x: hidden; }
 
 /* ── Navbar ────────────────────────────────── */
 .navbar {
@@ -237,6 +239,8 @@ textarea { resize: vertical; }
   display: flex;
   flex-direction: column;
   gap: 0;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 /* ── Page header (título + desc da página) ─── */
@@ -269,6 +273,7 @@ textarea { resize: vertical; }
   gap: 1rem;
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--color-border-light);
+  min-width: 0;
 }
 .adm-section:last-child { border-bottom: none; padding-bottom: 0; }
 .adm-section-title {
@@ -621,7 +626,7 @@ textarea { resize: vertical; }
 }
 .jobs-table {
   width: 100%;
-  min-width: 560px; /* garante scroll antes de comprimir demais */
+  min-width: 35rem; /* escala com font-size: 35rem × 16px = 560px base */
   border-collapse: collapse;
   background: var(--color-surface);
 }
