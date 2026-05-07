@@ -145,13 +145,14 @@ export default function EmpresaDashboard() {
               <Link to="/empresas/vagas/nova">Cadastre a primeira!</Link>
             </p>
           ) : (
+            <div className="table-wrap">
             <table className="jobs-table">
               <thead>
                 <tr>
                   <th>Cargo</th>
-                  <th>Categoria</th>
+                  <th className="col-hide-sm">Categoria</th>
                   <th>Status</th>
-                  <th>Cadastrada em</th>
+                  <th className="col-hide-sm">Cadastrada em</th>
                   <th>Atualizar</th>
                   <th>{t("applicants.title")}</th>
                 </tr>
@@ -161,7 +162,7 @@ export default function EmpresaDashboard() {
                   <>
                     <tr key={job.id}>
                       <td>{job.title}</td>
-                      <td>
+                      <td className="col-hide-sm">
                         {job.category?.slug
                           ? t(`category.${job.category.slug}`)
                           : job.category?.name}
@@ -255,6 +256,7 @@ export default function EmpresaDashboard() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       </main>

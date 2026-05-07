@@ -92,14 +92,15 @@ export default function AdmVagasPage() {
           ) : jobs.length === 0 ? (
             <p className="empty">Nenhuma vaga encontrada.</p>
           ) : (
+            <div className="table-wrap">
             <table className="jobs-table">
               <thead>
                 <tr>
                   <th scope="col">Empresa</th>
                   <th scope="col">Cargo</th>
-                  <th scope="col">Categoria</th>
+                  <th scope="col" className="col-hide-sm">Categoria</th>
                   <th scope="col">Status</th>
-                  <th scope="col">Data</th>
+                  <th scope="col" className="col-hide-sm">Data</th>
                   <th scope="col">Ações</th>
                   <th scope="col">{t("applicants.title")}</th>
                 </tr>
@@ -110,7 +111,7 @@ export default function AdmVagasPage() {
                     <tr key={job.id}>
                       <td>{job.company?.name}</td>
                       <td>{job.title}</td>
-                      <td>
+                      <td className="col-hide-sm">
                         {job.category?.slug
                           ? t(`category.${job.category.slug}`)
                           : job.category?.name}
@@ -120,7 +121,7 @@ export default function AdmVagasPage() {
                           {STATUS_LABEL[job.status]}
                         </span>
                       </td>
-                      <td>{new Date(job.createdAt).toLocaleDateString(dateLocale)}</td>
+                      <td className="col-hide-sm">{new Date(job.createdAt).toLocaleDateString(dateLocale)}</td>
                       <td className="table-actions">
                         {job.status === "PENDING" && (
                           <>
@@ -208,6 +209,7 @@ export default function AdmVagasPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
       </section>
 

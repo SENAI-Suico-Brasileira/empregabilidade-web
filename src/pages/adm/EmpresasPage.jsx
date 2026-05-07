@@ -150,14 +150,15 @@ export default function AdmEmpresasPage() {
         ) : companies.length === 0 ? (
           <p className="empty">Nenhuma empresa cadastrada ainda.</p>
         ) : (
+          <div className="table-wrap">
           <table className="jobs-table">
             <thead>
               <tr>
                 <th>Empresa</th>
-                <th>CNPJ</th>
-                <th>Responsável</th>
+                <th className="col-hide-sm">CNPJ</th>
+                <th className="col-hide-sm">Responsável</th>
                 <th>E-mail</th>
-                <th>Vagas</th>
+                <th className="col-hide-sm">Vagas</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>
@@ -167,10 +168,10 @@ export default function AdmEmpresasPage() {
                 <>
                   <tr key={c.id} className={!c.user?.active ? "row-inactive" : ""}>
                     <td>{c.name}</td>
-                    <td>{c.cnpj ?? "—"}</td>
-                    <td>{c.user?.name}</td>
+                    <td className="col-hide-sm">{c.cnpj ?? "—"}</td>
+                    <td className="col-hide-sm">{c.user?.name}</td>
                     <td>{c.user?.email}</td>
-                    <td>{c._count?.jobs ?? 0}</td>
+                    <td className="col-hide-sm">{c._count?.jobs ?? 0}</td>
                     <td>
                       <span className={`badge ${c.user?.active ? "badge-active" : "badge-inactive"}`}>
                         {c.user?.active ? "Ativa" : "Inativa"}
@@ -268,6 +269,7 @@ export default function AdmEmpresasPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </section>
     </div>

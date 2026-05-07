@@ -361,13 +361,14 @@ export default function AdmDashboard() {
             {pendingJobs.length === 0 ? (
               <p className="empty">Nenhuma vaga aguardando aprovação.</p>
             ) : (
+              <div className="table-wrap">
               <table className="jobs-table">
                 <thead>
                   <tr>
                     <th>Empresa</th>
                     <th>Cargo</th>
-                    <th>Categoria</th>
-                    <th>Enviada em</th>
+                    <th className="col-hide-sm">Categoria</th>
+                    <th className="col-hide-sm">Enviada em</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
@@ -376,12 +377,12 @@ export default function AdmDashboard() {
                     <tr key={job.id}>
                       <td>{job.company?.name}</td>
                       <td>{job.title}</td>
-                      <td>
+                      <td className="col-hide-sm">
                         {job.category?.slug
                           ? t(`category.${job.category.slug}`)
                           : job.category?.name}
                       </td>
-                      <td>{new Date(job.createdAt).toLocaleDateString("pt-BR")}</td>
+                      <td className="col-hide-sm">{new Date(job.createdAt).toLocaleDateString("pt-BR")}</td>
                       <td className="table-actions">
                         <button className="btn btn-sm btn-success" onClick={() => approveJob(job.id)}>
                           {t("common.approve")}
@@ -394,6 +395,7 @@ export default function AdmDashboard() {
                   ))}
                 </tbody>
               </table>
+              </div>
             )}
           </section>
 

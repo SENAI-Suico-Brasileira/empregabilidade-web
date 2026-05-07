@@ -610,14 +610,20 @@ textarea { resize: vertical; }
 .checkbox-label-block span { line-height: 1.6; color: #475569; font-size: 0.875rem; }
 
 /* ── Tables ─────────────────────────────────── */
-.jobs-table {
+/* Wrapper para scroll horizontal contido — envolve toda <table> */
+.table-wrap {
   width: 100%;
-  border-collapse: collapse;
-  background: var(--color-surface);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
-  overflow: hidden;
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-card);
+}
+.jobs-table {
+  width: 100%;
+  min-width: 560px; /* garante scroll antes de comprimir demais */
+  border-collapse: collapse;
+  background: var(--color-surface);
 }
 .jobs-table th {
   background: #f8fafc;
@@ -1152,15 +1158,15 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
 /* ─────────────────────────────────────────────────
  * Responsividade
  * Breakpoints:
+ *   laptop  → max-width: 1024px
  *   tablet  → max-width: 768px
- *   mobile  → max-width: 480px
+ *   mobile  → max-width: 640px
+ *   small   → max-width: 480px
  * ───────────────────────────────────────────────── */
 
-@media (max-width: 768px) {
-  /* Layout */
-  .area-main { padding: 1.5rem var(--layout-padding); }
-
-  /* Admin sidebar — colapsa para topo */
+/* ── Laptop / tablet grande (≤ 1024px) ──────────── */
+/* Sidebar admin colapsa para barra no topo */
+@media (max-width: 1024px) {
   .adm-sidebar {
     width: 100%;
     height: auto;
@@ -1168,117 +1174,113 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.25rem;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
   }
   .adm-sidebar-brand { padding: 0; border-bottom: none; }
   .adm-sidebar-brand-sub { display: none; }
-  .adm-sidebar-nav { flex-direction: row; flex: unset; padding: 0; gap: 0; }
-  .adm-sidebar-link { padding: 0.4rem 0.6rem; font-size: 0.8rem; gap: 0.4rem; }
+  .adm-sidebar-nav { flex-direction: row; flex: unset; padding: 0; gap: 0.25rem; }
+  .adm-sidebar-link { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
   .adm-sidebar-footer { flex-direction: row; align-items: center; padding: 0; border-top: none; gap: 0.5rem; }
   .adm-sidebar-user-info { display: none; }
   .adm-sidebar-footer-actions { gap: 0.4rem; }
-  .adm-content { margin-left: 0; padding: 1.5rem 1rem; max-width: 100%; }
+  .adm-content { margin-left: 0; padding: 1.5rem 1.5rem; max-width: 100%; }
+  .adm-page-header { flex-wrap: wrap; }
+}
+
+/* ── Tablet (≤ 768px) ────────────────────────────── */
+@media (max-width: 768px) {
+  /* Layout */
+  .area-main { padding: 1.5rem var(--layout-padding); }
+  .adm-content { padding: 1.25rem 1rem; }
   .adm-page-header { flex-direction: column; align-items: flex-start; }
   .adm-page-title { font-size: 1.1rem; }
 
-  /* Gráficos — 1 coluna no tablet */
+  /* Gráficos — 1 coluna */
   .charts-row { grid-template-columns: 1fr; }
 
-  /* Modal — ocupa mais tela */
+  /* Modal */
   .modal { padding: 1.5rem; }
 
-
-  /* Navbar — esconde nome e divisor do portal, mantém logo e ações */
+  /* Navbar */
   .navbar-portal-name { display: none; }
   .navbar-brand-divider { display: none; }
   .navbar-actions .btn { font-size: 0.8rem; padding: 0.4rem 0.85rem; }
 
-  /* Area header — esconde nome de usuário em telas menores */
+  /* Area header */
   .area-header-username { display: none; }
 
-  /* Hero — empilha verticalmente e esconde o logo decorativo */
-  .hero {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 2rem 1.5rem;
-    gap: 1rem;
-  }
+  /* Hero */
+  .hero { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; gap: 1rem; }
   .hero-logo { display: none; }
   .hero-content h1 { font-size: 1.4rem; }
 
-  /* Jobs grid — 1 coluna */
+  /* Jobs grid */
   .jobs-grid { grid-template-columns: 1fr; }
 
-  /* Formulários — cada .form-row vira coluna única */
+  /* Formulários */
   .form-row { grid-template-columns: 1fr; }
-
-  /* Formulário de vaga — menos padding */
   .job-form { padding: 1.25rem; }
   .form-section { padding: 1.1rem; }
-
-  /* Auth — menos padding interno */
   .auth-form { padding: 1.75rem 1.25rem; }
 
-  /* Tabelas — scroll horizontal em vez de quebrar layout */
-  .jobs-table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-  }
-
-  /* Gráfico de categorias — remove coluna fixa de 140px */
-  .category-stat-row {
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-  }
+  /* Gráfico de categorias */
+  .category-stat-row { grid-template-columns: 1fr auto; grid-template-rows: auto auto; }
   .category-stat-bar-wrap { grid-column: 1 / -1; }
 
-  /* Section header — botão vai para nova linha se precisar */
+  /* Section header */
   .section-header { flex-direction: column; align-items: flex-start; }
 
-  /* Indicadores — 2 colunas no tablet */
+  /* Indicadores — 2 colunas */
   .indicators-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* Form actions — botões ocupam largura total */
-  .form-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
+  /* Form actions */
+  .form-actions { flex-direction: column-reverse; align-items: stretch; }
   .form-actions .btn { text-align: center; justify-content: center; }
+
+  /* Sidebar nav — compacta no tablet menor */
+  .adm-sidebar-link { padding: 0.35rem 0.5rem; font-size: 0.8rem; gap: 0.35rem; }
 }
 
+/* ── Mobile (≤ 640px) ────────────────────────────── */
+@media (max-width: 640px) {
+  /* Oculta colunas marcadas como secundárias */
+  .col-hide-sm { display: none !important; }
+
+  /* Botões de ação — empilham */
+  .table-actions { flex-wrap: wrap; gap: 0.35rem; }
+
+  /* Sidebar nav — só ícones */
+  .adm-sidebar-link-label { display: none; }
+  .adm-sidebar-link { padding: 0.4rem 0.6rem; }
+
+  /* Conta page — senha current empilha */
+  .conta-card { max-width: 100%; }
+}
+
+/* ── Mobile pequeno (≤ 480px) ────────────────────── */
 @media (max-width: 480px) {
-  /* Layout — mais espaço útil em telas muito pequenas */
   :root { --layout-padding: 4vw; }
   .area-main { padding: 1rem var(--layout-padding); }
 
-  /* Hero */
   .hero { padding: 1.5rem 1.25rem; }
   .hero-content h1 { font-size: 1.25rem; }
 
-  /* Navbar — altura um pouco menor e botões compactos */
   .navbar { height: 56px; }
   .navbar-actions .btn { font-size: 0.75rem; padding: 0.35rem 0.65rem; }
   .navbar-actions { gap: 0.4rem; }
 
-  /* Indicadores — 1 coluna no mobile pequeno */
   .indicators-grid { grid-template-columns: 1fr; }
 
-  /* Botões de ação das tabelas — empilha verticalmente */
-  .table-actions { flex-wrap: wrap; }
-
-  /* Job card footer — data e botão empilhados */
   .job-card-footer { flex-direction: column; align-items: flex-start; }
   .job-card-footer .btn { width: 100%; justify-content: center; }
 
-  /* A11y: painel não ultrapassa a largura da tela em mobile */
-  .a11y-panel {
-    width: calc(100vw - 72px);
-    max-width: 264px;
-  }
+  .a11y-panel { width: calc(100vw - 48px); max-width: 264px; }
+
+  /* Sidebar admin — esconde texto dos links no mobile pequeno */
+  .adm-sidebar-link-label { display: none; }
+  .adm-sidebar-footer-actions .btn { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
 }
 
 /* ── Apply Modal ─────────────────────────────── */
