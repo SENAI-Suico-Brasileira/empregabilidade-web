@@ -1,4 +1,5 @@
-import { NavLink, Outlet, useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, Outlet, useNavigate, Link, useLocation } from "react-router-dom";
 import SenaiLogo from "./SenaiLogo";
 import { useAuth } from "../hooks/useAuth";
 
@@ -50,16 +51,63 @@ const NAV_ITEMS = [
 
 export default function AdmLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   function handleLogout() {
     logout();
     navigate("/adm/login");
   }
 
+  // Fecha o drawer ao navegar
+  useEffect(() => { setDrawerOpen(false); }, [location.pathname]);
+
+  // Esc fecha o drawer + trava scroll do body enquanto aberto
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e) => e.key === "Escape" && setDrawerOpen(false);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [drawerOpen]);
+
   return (
     <div className="adm-layout">
-      <aside className="adm-sidebar">
+      {/* Barra fixa no mobile com hamburger */}
+      <header className="adm-mobile-bar">
+        <button
+          type="button"
+          className="adm-mobile-toggle"
+          onClick={() => setDrawerOpen(true)}
+          aria-label="Abrir menu de navegação"
+          aria-expanded={drawerOpen}
+          aria-controls="adm-sidebar"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <Link to="/adm" className="adm-mobile-brand" aria-label="Painel administrativo">
+          <SenaiLogo size={26} />
+          <span>Empregabilidade</span>
+        </Link>
+        <button onClick={handleLogout} className="btn btn-outline btn-sm">Sair</button>
+      </header>
+
+      {/* Backdrop do drawer */}
+      <div
+        className={`adm-sidebar-backdrop${drawerOpen ? " open" : ""}`}
+        onClick={() => setDrawerOpen(false)}
+        aria-hidden="true"
+      />
+
+      <aside id="adm-sidebar" className={`adm-sidebar${drawerOpen ? " open" : ""}`}>
         <div className="adm-sidebar-brand">
           <Link to="/adm" className="adm-sidebar-brand-link">
             <SenaiLogo size={30} />
@@ -68,6 +116,14 @@ export default function AdmLayout() {
               <span className="adm-sidebar-brand-sub">Painel Administrativo</span>
             </div>
           </Link>
+          <button
+            type="button"
+            className="adm-sidebar-close"
+            onClick={() => setDrawerOpen(false)}
+            aria-label="Fechar menu"
+          >
+            ×
+          </button>
         </div>
 
         <nav className="adm-sidebar-nav" aria-label="Navegação administrativa">

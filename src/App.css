@@ -235,6 +235,13 @@ textarea { resize: vertical; }
   max-width: 1440px;
 }
 
+/* Mobile bar, close button e backdrop — ocultos no desktop, visíveis apenas no media query mobile */
+.adm-mobile-bar,
+.adm-sidebar-close,
+.adm-sidebar-backdrop {
+  display: none;
+}
+
 .adm-page {
   display: flex;
   flex-direction: column;
@@ -1169,28 +1176,145 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
  *   small   → max-width: 480px
  * ───────────────────────────────────────────────── */
 
-/* ── Laptop / tablet grande (≤ 1024px) ──────────── */
-/* Sidebar admin colapsa para barra no topo */
+/* ── Laptop / tablet (≤ 1024px) ───────────────────── */
+/* Sidebar admin vira drawer lateral acionado por hamburger */
 @media (max-width: 1024px) {
-  .adm-sidebar {
-    width: 100%;
-    height: auto;
-    position: sticky;
-    flex-direction: row;
+  /* Barra fixa no topo com hamburger + brand + sair */
+  .adm-mobile-bar {
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.6rem 1.25rem;
-    border-right: none;
+    gap: 0.75rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    padding: 0 1rem;
+    background: var(--color-surface);
     border-bottom: 1px solid var(--color-border);
+    z-index: 150;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
-  .adm-sidebar-brand { padding: 0; border-bottom: none; }
-  .adm-sidebar-brand-sub { display: none; }
-  .adm-sidebar-nav { flex-direction: row; flex: unset; padding: 0; gap: 0.25rem; }
-  .adm-sidebar-link { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
-  .adm-sidebar-footer { flex-direction: row; align-items: center; padding: 0; border-top: none; gap: 0.5rem; }
-  .adm-sidebar-user-info { display: none; }
-  .adm-sidebar-footer-actions { gap: 0.4rem; }
-  .adm-content { margin-left: 0; padding: 1.5rem 1.5rem; max-width: 100%; }
+  .adm-mobile-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: background 0.15s;
+  }
+  .adm-mobile-toggle:hover,
+  .adm-mobile-toggle:focus-visible {
+    background: var(--color-bg);
+  }
+  .adm-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 0.95rem;
+    overflow: hidden;
+  }
+  .adm-mobile-brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Sidebar vira drawer escondido por padrão */
+  .adm-sidebar {
+    width: 280px;
+    max-width: 85vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    border-right: 1px solid var(--color-border);
+    border-bottom: none;
+    padding: 0;
+    box-shadow: 8px 0 24px rgba(0,0,0,0.18);
+  }
+  .adm-sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Restaura layout vertical interno do sidebar (sobrescreve as antigas regras de barra horizontal) */
+  .adm-sidebar-brand {
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .adm-sidebar-brand-sub { display: block; }
+  .adm-sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--color-text-muted);
+    padding: 0 0.5rem;
+    border-radius: var(--radius-md);
+  }
+  .adm-sidebar-close:hover { color: var(--color-text); background: var(--color-bg); }
+  .adm-sidebar-nav {
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem 0.75rem;
+    gap: 0.25rem;
+  }
+  .adm-sidebar-link {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.95rem;
+    gap: 0.75rem;
+  }
+  .adm-sidebar-link-label { display: inline; }
+  .adm-sidebar-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    border-top: 1px solid var(--color-border);
+    gap: 0.75rem;
+  }
+  .adm-sidebar-user-info { display: flex; }
+  .adm-sidebar-footer-actions { gap: 0.5rem; }
+
+  /* Backdrop semi-transparente cobrindo o conteúdo quando o drawer está aberto */
+  .adm-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 140;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s;
+  }
+  .adm-sidebar-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Conteúdo principal compensa a altura da barra mobile */
+  .adm-content {
+    margin-left: 0;
+    padding: calc(56px + 1.25rem) 1.25rem 1.5rem;
+    max-width: 100%;
+  }
   .adm-page-header { flex-wrap: wrap; }
 }
 
@@ -1243,9 +1367,6 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
   /* Form actions */
   .form-actions { flex-direction: column-reverse; align-items: stretch; }
   .form-actions .btn { text-align: center; justify-content: center; }
-
-  /* Sidebar nav — compacta no tablet menor */
-  .adm-sidebar-link { padding: 0.35rem 0.5rem; font-size: 0.8rem; gap: 0.35rem; }
 }
 
 /* ── Mobile (≤ 640px) ────────────────────────────── */
@@ -1255,10 +1376,6 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
 
   /* Botões de ação — empilham */
   .table-actions { flex-wrap: wrap; gap: 0.35rem; }
-
-  /* Sidebar nav — só ícones */
-  .adm-sidebar-link-label { display: none; }
-  .adm-sidebar-link { padding: 0.4rem 0.6rem; }
 
   /* Conta page — senha current empilha */
   .conta-card { max-width: 100%; }
@@ -1283,9 +1400,8 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
 
   .a11y-panel { width: calc(100vw - 48px); max-width: 264px; }
 
-  /* Sidebar admin — esconde texto dos links no mobile pequeno */
-  .adm-sidebar-link-label { display: none; }
-  .adm-sidebar-footer-actions .btn { font-size: 0.75rem; padding: 0.3rem 0.5rem; }
+  /* Drawer: botões do rodapé um pouco menores */
+  .adm-sidebar-footer-actions .btn { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
 }
 
 /* ── Apply Modal ─────────────────────────────── */
