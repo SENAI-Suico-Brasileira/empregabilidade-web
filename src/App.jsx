@@ -12,6 +12,7 @@ import AdmLoginPage from "./pages/adm/LoginPage";
 import AdmDashboard from "./pages/adm/Dashboard";
 import AdmVagasPage from "./pages/adm/VagasPage";
 import AdmEmpresasPage from "./pages/adm/EmpresasPage";
+import AdmAdminsPage from "./pages/adm/AdminsPage";
 import AdmLayout from "./components/AdmLayout";
 
 // Área da empresa
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/adm" element={<AdmDashboard />} />
             <Route path="/adm/vagas" element={<AdmVagasPage />} />
             <Route path="/adm/empresas" element={<AdmEmpresasPage />} />
+            <Route path="/adm/admins" element={<AdmAdminsPage />} />
           </Route>
 
           {/* ── Área da empresa (/empresas) ── */}

@@ -22,4 +22,10 @@ export const admService = {
 
   listApplicants: (jobId) =>
     api.get(`/adm/vagas/${jobId}/candidatos`).then((r) => r.data),
+
+  listAdmins: () => api.get("/adm/admins").then((r) => r.data),
+  createAdmin: (data) => api.post("/adm/admins", data).then((r) => r.data),
+  toggleAdminActive: (id) => api.patch(`/adm/admins/${id}/toggle-ativo`).then((r) => r.data),
+  resetAdminPassword: (id, newPassword) =>
+    api.post(`/adm/admins/${id}/resetar-senha`, { newPassword }).then((r) => r.data),
 };
