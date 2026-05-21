@@ -1322,7 +1322,8 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
 @media (max-width: 768px) {
   /* Layout */
   .area-main { padding: 1.5rem var(--layout-padding); }
-  .adm-content { padding: 1.25rem 1rem; }
+  /* Mantém o offset do header mobile fixo (56px) ao apertar o padding lateral */
+  .adm-content { padding: calc(56px + 1rem) 1rem 1.5rem; }
   .adm-page-header { flex-direction: column; align-items: flex-start; }
   .adm-page-title { font-size: 1.1rem; }
 
@@ -1374,8 +1375,19 @@ html[data-contrast="high"] .btn-ghost   { border: 1.5px solid var(--color-border
   /* Oculta colunas marcadas como secundárias */
   .col-hide-sm { display: none !important; }
 
-  /* Botões de ação — empilham */
-  .table-actions { flex-wrap: wrap; gap: 0.35rem; }
+  /* Tabelas — padding menor + permite quebra de palavras longas (emails) */
+  .jobs-table { min-width: 28rem; }
+  .jobs-table th,
+  .jobs-table td {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.8rem;
+  }
+  .jobs-table td { word-break: break-word; overflow-wrap: anywhere; }
+  .table-actions { flex-wrap: wrap; gap: 0.3rem; }
+  .table-actions .btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.55rem;
+  }
 
   /* Conta page — senha current empilha */
   .conta-card { max-width: 100%; }
