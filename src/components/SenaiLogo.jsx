@@ -18,7 +18,7 @@ export default function SenaiLogo({ size = 36, variant = "default" }) {
       viewBox="0 0 192 60"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="SENAI Suiço Brasileira"
+      aria-label="SENAI Suiço-Brasileira"
       role="img"
     >
       {/* Bloco vermelho à esquerda */}

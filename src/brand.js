@@ -1,5 +1,5 @@
 /**
- * Identidade visual e textos institucionais do SENAI Suiço Brasileira.
+ * Identidade visual e textos institucionais do SENAI Suiço-Brasileira.
  * Centralize aqui qualquer alteração de nome, cor ou slogan
  * para que reflita automaticamente em toda a aplicação.
  */
@@ -8,7 +8,7 @@ export const BRAND = {
   name: "SENAI",
 
   /** Nome completo da unidade */
-  fullName: "SENAI Suiço Brasileira",
+  fullName: "SENAI Suiço-Brasileira",
 
   /** Nome do portal */
   portalName: "Portal de Empregabilidade",
