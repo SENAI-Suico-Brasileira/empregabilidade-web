@@ -37,7 +37,7 @@ export default function SenaiLogo({ size = 36, variant = "default" }) {
         SENAI
       </text>
 
-      {/* Subtítulo "Suiço Brasileira" */}
+      {/* Subtítulo "Suiço-Brasileira" */}
       <text
         x="17"
         y="54"
@@ -47,7 +47,7 @@ export default function SenaiLogo({ size = 36, variant = "default" }) {
         fill={subtitleColor}
         letterSpacing="0.3"
       >
-        Suiço Brasileira
+        Suiço-Brasileira
       </text>
     </svg>
   );
