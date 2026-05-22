@@ -61,6 +61,53 @@ textarea { resize: vertical; }
 }
 .page { display: flex; flex-direction: column; gap: 2rem; min-width: 0; overflow-x: hidden; }
 
+/* ── App Shell ─────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Site Footer ───────────────────────────── */
+.site-footer {
+  padding: 0.625rem var(--layout-padding);
+  margin-top: auto;
+  text-align: center;
+  background: transparent;
+}
+.site-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-text-faint);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.site-footer-link:hover,
+.site-footer-link:focus-visible {
+  color: var(--color-primary);
+}
+.site-footer-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+.site-footer-dot {
+  color: var(--color-text-faint);
+  opacity: 0.6;
+}
+.site-footer-icon {
+  opacity: 0.7;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.site-footer-link:hover .site-footer-icon {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
 /* ── Navbar ────────────────────────────────── */
 .navbar {
   background: var(--color-surface);

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider } from "./context/AppContext";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import A11yWidget from "./components/A11yWidget";
 
@@ -27,6 +28,7 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
+        <div className="app-shell">
         <Routes>
           <Route path="/" element={<Navigate to="/mural" replace />} />
 
@@ -58,6 +60,9 @@ export default function App() {
           <Route path="/empresas/vagas/nova" element={<PrivateRoute role="COMPANY"><EmpresaCreateJobPage /></PrivateRoute>} />
           <Route path="/empresas/conta" element={<PrivateRoute role="COMPANY"><EmpresaContaPage /></PrivateRoute>} />
         </Routes>
+
+        <Footer />
+        </div>
 
         {/* Widget de acessibilidade disponível em todas as páginas */}
         <A11yWidget />
