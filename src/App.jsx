@@ -8,7 +8,7 @@ import A11yWidget from "./components/A11yWidget";
 // Mural público
 import MuralPage from "./pages/mural/MuralPage";
 
-// Área administrativa (SENAI)
+// Área administrativa
 import AdmLoginPage from "./pages/adm/LoginPage";
 import AdmDashboard from "./pages/adm/Dashboard";
 import AdmVagasPage from "./pages/adm/VagasPage";

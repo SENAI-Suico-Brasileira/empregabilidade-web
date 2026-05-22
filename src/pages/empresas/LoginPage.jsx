@@ -1,5 +1,5 @@
 import { Navigate, Link } from "react-router-dom";
-import SenaiLogo from "../../components/SenaiLogo";
+import BrandLogo from "../../components/BrandLogo";
 import { BRAND } from "../../brand";
 import { useAuth } from "../../hooks/useAuth";
 import { useLoginForm } from "../../hooks/useLoginForm";
@@ -23,7 +23,7 @@ export default function EmpresaLoginPage() {
     <div className="auth-page">
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <div className="auth-form-header">
-          <SenaiLogo size={44} />
+          <BrandLogo size={44} showText={false} />
           <h1>{t("auth.companyArea")}</h1>
           <p>{BRAND.portalName}</p>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BRAND } from "../../brand";
-import SenaiLogo from "../../components/SenaiLogo";
+import BrandLogo from "../../components/BrandLogo";
 import JobCard from "../../components/JobCard";
 import CategoryFilter from "../../components/CategoryFilter";
 import { useJobs } from "../../hooks/useJobs";
@@ -20,12 +20,12 @@ export default function MuralPage() {
     <div className="page">
       <div className="hero" role="banner">
         <div className="hero-content">
-          <span className="hero-badge">{BRAND.fullName}</span>
+          <span className="hero-badge">Vagas abertas</span>
           <h1>{BRAND.portalName}</h1>
           <p>{BRAND.tagline}</p>
         </div>
         <div className="hero-logo" aria-hidden="true">
-          <SenaiLogo size={52} variant="white" />
+          <BrandLogo size={52} variant="white" showText={false} />
         </div>
       </div>
 

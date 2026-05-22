@@ -94,8 +94,8 @@ export default function AdmDashboard() {
     : null;
 
   const filledByData = totalFilled > 0 ? [
-    { name: "Alunos SENAI", value: indicators.filledBySenai },
-    { name: "Outros",       value: indicators.filledByOther },
+    { name: "Alunos da instituição", value: indicators.filledBySenai },
+    { name: "Outros",                value: indicators.filledByOther },
   ] : [];
 
   const contractData = Object.entries(indicators?.jobsByContractType ?? {}).map(
@@ -152,7 +152,7 @@ export default function AdmDashboard() {
               <KpiCard value={indicators?.jobsByStatus?.ACTIVE ?? 0}      label="Ativas no mural" accent={C_GREEN} />
               <KpiCard value={indicators?.jobsByStatus?.IN_PROGRESS ?? 0} label="Seleções em andamento" accent={C_BLUE} />
               <KpiCard value={indicators?.jobsByStatus?.COMPLETED ?? 0}   label="Vagas preenchidas" accent={C_RED}
-                sub={senaiRate !== null ? `${senaiRate}% por alunos SENAI` : null} />
+                sub={senaiRate !== null ? `${senaiRate}% por alunos da instituição` : null} />
               <KpiCard value={indicators?.totalCompanies ?? 0}            label="Empresas cadastradas" />
               <KpiCard value={indicators?.companiesWithActiveJobs ?? 0}   label="Com vagas ativas" />
             </div>
@@ -258,7 +258,7 @@ export default function AdmDashboard() {
                       {senaiRate !== null && (
                         <div className="chart-kpi">
                           <span className="chart-kpi-value" style={{ color: C_GREEN }}>{senaiRate}%</span>
-                          <span className="chart-kpi-label">preenchidas por alunos SENAI</span>
+                          <span className="chart-kpi-label">preenchidas por alunos da instituição</span>
                         </div>
                       )}
                     </div>

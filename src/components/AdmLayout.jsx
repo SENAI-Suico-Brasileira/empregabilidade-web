@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import SenaiLogo from "./SenaiLogo";
+import BrandLogo from "./BrandLogo";
 import { useAuth } from "../hooks/useAuth";
 
 const NAV_ITEMS = [
@@ -94,7 +94,7 @@ export default function AdmLayout() {
           </svg>
         </button>
         <Link to="/adm" className="adm-mobile-brand" aria-label="Painel administrativo">
-          <SenaiLogo size={26} />
+          <BrandLogo size={26} showText={false} />
           <span>Empregabilidade</span>
         </Link>
         <button onClick={handleLogout} className="btn btn-outline btn-sm">Sair</button>
@@ -110,7 +110,7 @@ export default function AdmLayout() {
       <aside id="adm-sidebar" className={`adm-sidebar${drawerOpen ? " open" : ""}`}>
         <div className="adm-sidebar-brand">
           <Link to="/adm" className="adm-sidebar-brand-link">
-            <SenaiLogo size={30} />
+            <BrandLogo size={30} showText={false} />
             <div className="adm-sidebar-brand-text">
               <span className="adm-sidebar-brand-title">Empregabilidade</span>
               <span className="adm-sidebar-brand-sub">Painel Administrativo</span>

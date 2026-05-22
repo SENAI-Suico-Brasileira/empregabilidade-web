@@ -1,5 +1,5 @@
 /*
- * Design System — SENAI Suiço-Brasileira
+ * Design System — Portal de Empregabilidade
  * Tokens centralizados: altere aqui e reflete em todo o sistema.
  */
 
@@ -804,7 +804,7 @@ textarea { resize: vertical; }
 /* ── Status final (COMPLETED) na tabela ──────── */
 .status-final { font-size: 0.78rem; color: var(--color-text-faint); font-style: italic; }
 
-/* ── Indicador: taxa SENAI ───────────────────── */
+/* ── Indicador: taxa de alunos da instituição ── */
 .indicator-rate { font-size: 0.72rem; color: var(--color-success); margin-top: 0.15rem; }
 
 /* ── Templates de vaga ───────────────────────── */

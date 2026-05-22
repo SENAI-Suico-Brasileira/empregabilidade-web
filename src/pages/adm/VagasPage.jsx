@@ -147,8 +147,8 @@ export default function AdmVagasPage() {
                           <span className="status-final">
                             {job.filledBy === "SENAI_STUDENT"
                               ? job.filledStudentName
-                                ? `Aluno SENAI — ${job.filledStudentName}`
-                                : "Aluno SENAI"
+                                ? `Aluno da instituição — ${job.filledStudentName}`
+                                : "Aluno da instituição"
                               : "Outro candidato"}
                           </span>
                         )}

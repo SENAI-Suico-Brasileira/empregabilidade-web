@@ -94,7 +94,7 @@ export default function EmpresaDashboard() {
     setModalError("");
 
     if (pendingAction.status === "COMPLETED" && !filledBy) {
-      setModalError("Selecione se a vaga foi preenchida por aluno do SENAI ou outro.");
+      setModalError("Selecione se a vaga foi preenchida por aluno da instituição ou outro.");
       return;
     }
     if (pendingAction.status === "INACTIVE" && !pauseReason.trim()) {
@@ -134,7 +134,7 @@ export default function EmpresaDashboard() {
           </div>
 
           <div className="info-banner">
-            Vagas criadas ficam em <strong>Aguardando aprovação</strong> até serem revisadas pela equipe SENAI.
+            Vagas criadas ficam em <strong>Aguardando aprovação</strong> até serem revisadas pela equipe administrativa.
           </div>
 
           {loading ? (
@@ -198,8 +198,8 @@ export default function EmpresaDashboard() {
                           <span className="status-final">
                             {job.filledBy === "SENAI_STUDENT"
                               ? job.filledStudentName
-                                ? `Aluno SENAI — ${job.filledStudentName}`
-                                : "Aluno SENAI"
+                                ? `Aluno da instituição — ${job.filledStudentName}`
+                                : "Aluno da instituição"
                               : "Outro candidato"}
                           </span>
                         )}
@@ -267,7 +267,7 @@ export default function EmpresaDashboard() {
           <div className="modal">
             <h3 className="modal-title">Confirmar vaga preenchida</h3>
             <p className="modal-desc">
-              Parabéns pela contratação! Para fins de acompanhamento do SENAI, informe a origem do candidato selecionado.
+              Parabéns pela contratação! Para fins de acompanhamento da instituição, informe a origem do candidato selecionado.
               Essa informação é obrigatória e não poderá ser alterada depois.
             </p>
 
@@ -283,8 +283,8 @@ export default function EmpresaDashboard() {
                   onChange={() => setFilledBy("SENAI_STUDENT")}
                 />
                 <div>
-                  <div>Aluno ou egresso do SENAI</div>
-                  <div className="modal-radio-sublabel">O candidato contratado estudou no SENAI</div>
+                  <div>Aluno ou egresso da instituição</div>
+                  <div className="modal-radio-sublabel">O candidato contratado estudou na instituição</div>
                 </div>
               </label>
               <label className="modal-radio-option">
@@ -304,7 +304,7 @@ export default function EmpresaDashboard() {
 
             {filledBy === "SENAI_STUDENT" && (
               <div className="form-group">
-                <label>Nome do aluno SENAI contratado (opcional)</label>
+                <label>Nome do aluno contratado (opcional)</label>
                 <input
                   placeholder="Ex: João Silva"
                   value={filledStudentName}

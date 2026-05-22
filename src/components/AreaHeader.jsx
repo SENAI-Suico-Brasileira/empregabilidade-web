@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import SenaiLogo from "./SenaiLogo";
+import BrandLogo from "./BrandLogo";
 import { BRAND } from "../brand";
 import { useAuth } from "../hooks/useAuth";
 
@@ -22,7 +22,7 @@ export default function AreaHeader({ areaName, homeHref }) {
     <header className="area-header">
       <div className="area-header-brand">
         <Link to={homeHref}>
-          <SenaiLogo size={32} />
+          <BrandLogo size={32} showText={false} />
         </Link>
         <span className="area-header-divider" aria-hidden="true" />
         <span className="area-header-name">{areaName}</span>

@@ -102,7 +102,7 @@ export default function EmpresaCreateJobPage() {
       <main className="area-main">
         <div className="page">
           <div className="info-banner">
-            Após o cadastro, a vaga ficará <strong>aguardando aprovação</strong> da equipe SENAI antes de aparecer no mural.
+            Após o cadastro, a vaga ficará <strong>aguardando aprovação</strong> da equipe do portal antes de aparecer no mural.
           </div>
 
           {/* ── Templates de vagas preenchidas ── */}
@@ -135,7 +135,7 @@ export default function EmpresaCreateJobPage() {
                 <input type="checkbox" name="companyConfidential" checked={form.companyConfidential} onChange={handleChange} />
                 Manter nome da empresa confidencial para os candidatos
               </label>
-              <span className="field-hint">O nome da empresa ficará visível apenas para a equipe SENAI.</span>
+              <span className="field-hint">O nome da empresa ficará visível apenas para a equipe administrativa.</span>
             </fieldset>
 
             {/* ── Dados da Vaga ── */}
@@ -283,13 +283,13 @@ export default function EmpresaCreateJobPage() {
               <label className="checkbox-label checkbox-label-block">
                 <input type="checkbox" name="lgpdConsent" checked={form.lgpdConsent} onChange={handleChange} required />
                 <span>
-                  Aceito compartilhar com o SENAI e alunos as informações acima de acordo com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018), autorizando o uso dos dados fornecidos exclusivamente para fins de divulgação de vagas de emprego.
+                  Aceito compartilhar com a instituição e alunos as informações acima de acordo com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018), autorizando o uso dos dados fornecidos exclusivamente para fins de divulgação de vagas de emprego.
                 </span>
               </label>
               <label className="checkbox-label checkbox-label-block">
                 <input type="checkbox" name="senaiDisclaimer" checked={form.senaiDisclaimer} onChange={handleChange} required />
                 <span>
-                  A iniciativa do SENAI na elaboração deste cadastro é intermediar o processo de inclusão de profissionais no mercado de trabalho. As informações contidas são de responsabilidade exclusiva das empresas, que declaram aceitar sua divulgação por via dos diversos meios de comunicação.
+                  A iniciativa deste portal é intermediar o processo de inclusão de profissionais no mercado de trabalho. As informações contidas são de responsabilidade exclusiva das empresas, que declaram aceitar sua divulgação por via dos diversos meios de comunicação.
                 </span>
               </label>
             </fieldset>

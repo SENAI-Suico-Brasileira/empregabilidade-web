@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import SenaiLogo from "./SenaiLogo";
+import BrandLogo from "./BrandLogo";
 import { BRAND } from "../brand";
 import { useAuth } from "../hooks/useAuth";
 import { useApp } from "../context/AppContext";
@@ -45,10 +45,8 @@ export default function Navbar() {
 
   return (
     <nav className="navbar" role="navigation" aria-label="Navegação principal">
-      <Link to="/mural" className="navbar-brand" aria-label={`${BRAND.fullName} — ${BRAND.portalName}`}>
-        <SenaiLogo size={38} />
-        <span className="navbar-brand-divider" aria-hidden="true" />
-        <span className="navbar-portal-name">{t("nav.portal")}</span>
+      <Link to="/mural" className="navbar-brand" aria-label={BRAND.fullName}>
+        <BrandLogo size={36} />
       </Link>
       <div className="navbar-actions" role="menubar">{renderActions()}</div>
     </nav>

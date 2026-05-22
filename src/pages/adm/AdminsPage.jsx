@@ -54,7 +54,7 @@ export default function AdmAdminsPage() {
       <div className="adm-page-header">
         <div className="adm-page-header-text">
           <h1 className="adm-page-title">Administradores</h1>
-          <p className="adm-page-desc">Analistas do SENAI com acesso ao painel</p>
+          <p className="adm-page-desc">Equipe administrativa com acesso ao painel</p>
         </div>
         <button className="btn btn-primary" onClick={() => { setShowForm((v) => !v); setError(""); }}>
           {showForm ? "Cancelar" : "+ Novo Administrador"}
