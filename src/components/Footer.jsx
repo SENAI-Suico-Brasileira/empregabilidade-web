@@ -9,8 +9,6 @@ export default function Footer() {
         aria-label="Perfil de Lucas Corrêa no LinkedIn"
       >
         <span>Prof. Lucas Corrêa</span>
-        <span className="site-footer-dot" aria-hidden="true">·</span>
-        <span>Unidade 115</span>
         <svg
           className="site-footer-icon"
           width="12"
